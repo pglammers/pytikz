@@ -2,15 +2,15 @@ import os
 
 
 class LatexFigure:
-    def __init__(self, fig_name: str, directory=os.getcwd()) -> None:
+    def __init__(self, fig_name: str, directory: str=os.getcwd()):
         # defines the file names and initializes the data string
-        assert type(fig_name) is str
         self.fig_name = fig_name
+        self.directory = directory
         self.paths = {
             'dir': directory,
-            'data': os.path.join(directory, fig_name + '_data.tex'),
+            'data':       os.path.join(directory, fig_name + '_data.tex'),
             'standalone': os.path.join(directory, fig_name + '_standalone.tex'),
-            'include': os.path.join(directory, fig_name + '_include.tex'),
+            'include':    os.path.join(directory, fig_name + '_include.tex'),
             'standalone_aux': [
                 os.path.join(directory, fig_name + '_standalone.aux'),
                 os.path.join(directory, fig_name + '_standalone.log')
@@ -18,7 +18,7 @@ class LatexFigure:
         }
         self._string = ''
 
-    def append_string(self, data: str) -> None:
+    def append_string(self, data: str):
         # appends data to the data.tex file
         self._string += data
 
