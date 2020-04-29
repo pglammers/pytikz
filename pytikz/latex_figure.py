@@ -2,7 +2,7 @@ import os
 
 
 class LatexFigure:
-    def __init__(self, fig_name: str, save_dir: str=os.getcwd()):
+    def __init__(self, fig_name: str, save_dir: str = os.getcwd()):
         # defines the file names and initializes the data string
         self.fig_name = fig_name
         self.save_dir = save_dir
