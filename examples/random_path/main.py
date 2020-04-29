@@ -15,4 +15,4 @@ if __name__ == "__main__":
     path.line_join = 'round'
     fig.draw(path)
 
-    fig.update()
+    fig.build()
