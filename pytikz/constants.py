@@ -9,6 +9,11 @@ LINE_WIDTHS = [
     'very thick',
     'ultra thick'
 ]
+LINE_JOINS = [
+    'miter',
+    'bevel',
+    'round'
+]
 
 # default fill color for this package
 DEFAULT_FILL_COLOR = 'yellow'
