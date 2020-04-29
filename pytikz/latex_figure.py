@@ -2,18 +2,20 @@ import os
 
 
 class LatexFigure:
-    def __init__(self, fig_name: str, directory: str=os.getcwd()):
+    def __init__(self, fig_name: str, save_dir: str=os.getcwd()):
         # defines the file names and initializes the data string
         self.fig_name = fig_name
-        self.directory = directory
+        self.save_dir = save_dir
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
         self.paths = {
-            'dir': directory,
-            'data':       os.path.join(directory, fig_name + '_data.tex'),
-            'standalone': os.path.join(directory, fig_name + '_standalone.tex'),
-            'include':    os.path.join(directory, fig_name + '_include.tex'),
+            'dir': save_dir,
+            'data':       os.path.join(save_dir, fig_name + '_data.tex'),
+            'standalone': os.path.join(save_dir, fig_name + '_standalone.tex'),
+            'include':    os.path.join(save_dir, fig_name + '_include.tex'),
             'standalone_aux': [
-                os.path.join(directory, fig_name + '_standalone.aux'),
-                os.path.join(directory, fig_name + '_standalone.log')
+                os.path.join(save_dir, fig_name + '_standalone.aux'),
+                os.path.join(save_dir, fig_name + '_standalone.log')
             ]
         }
         self._string = ''
@@ -24,7 +26,7 @@ class LatexFigure:
 
     def draw(self, drawable):
         # parse drawable object and appends it to the string
-        self.append_string('{data}\n'.format(data=drawable.draw()))
+        self.append_string('{data}\n'.format(data=drawable.build_tikz_string()))
 
     def update(self, hard=False, cleanup=True):
         # creates the tex files and runs latexmk on the standalone tex file
