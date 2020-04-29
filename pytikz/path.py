@@ -1,14 +1,14 @@
 from .constants import LINE_WIDTHS, LINE_JOINS, DEFAULT_FILL_COLOR
 
 
-def path_from_vertices(vertices):
+def path_from_vertices(vertices: np.array) -> str:
     vertices_string_list = ['({x},{y})--'.format(x=v[0], y=v[1]) for v in vertices]
     path_string = ''.join(vertices_string_list)
     return path_string[:-2]
 
 
 class DrawablePath:
-    def __init__(self, vertices, cycle=False):
+    def __init__(self, vertices: np.array, cycle: bool = False):
         self.vertices = vertices
         self.cycle = cycle
 
@@ -20,7 +20,7 @@ class DrawablePath:
         self.fill = False
         self.fill_color = DEFAULT_FILL_COLOR
 
-    def draw(self):
+    def build_tikz_string(self) -> str:
         path = path_from_vertices(self.vertices)
         if self.cycle:
             path += '--cycle'
