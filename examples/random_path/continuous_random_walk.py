@@ -22,6 +22,8 @@ if __name__ == "__main__":
     # vertices /= np.sqrt(n_steps)
     # vertices = 10 * np.random.rand(10, 2)
 
+    # fig.append_string('\clip (0,0) rectangle (15,15);\n')
+
     path = DrawablePath(vertices)
     path.line_join = 'round'
     fig.draw(path)
