@@ -1,7 +1,7 @@
 import numpy as np
 
 from .constants import LINE_WIDTHS, LINE_JOINS, DEFAULT_FILL_COLOR
-
+import numpy as np
 
 def path_from_vertices(vertices: np.array) -> str:
     vertices_string_list = ['({x},{y})--'.format(x=v[0], y=v[1]) for v in vertices]
