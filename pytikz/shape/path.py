@@ -1,6 +1,6 @@
 import numpy as np
 
-from .constants import LINE_WIDTHS, LINE_JOINS, DEFAULT_FILL_COLOR
+from ..constants import LINE_WIDTHS, LINE_JOINS, DEFAULT_FILL_COLOR
 
 
 def path_from_vertices(vertices: np.array) -> str:

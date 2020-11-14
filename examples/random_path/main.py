@@ -1,8 +1,8 @@
 import os
 import numpy as np
 
-from pytikz.latex_figure import LatexFigure
-from pytikz.path import DrawablePath
+from pytikz import LatexFigure
+from pytikz import DrawablePath
 
 
 if __name__ == "__main__":
