@@ -1,4 +1,5 @@
 from pprint import pprint
+from .constants import *
 
 
 class Vector:
@@ -46,5 +47,32 @@ class Path:
 			path_string += " -- cycle"
 		return path_string
 
-	def build_tikz_string(self):
-		return f"\\draw{self};"
+
+class DrawablePath(Path):
+	line = True
+	line_color = None
+	line_width = None
+	line_join = None
+
+	fill = False
+	fill_color = None
+
+	def __str__(self):
+		if self.fill: assert self.cycle
+
+		path = super().__str__()
+
+		if not self.line:
+			if self.fill: return f"\\fill[{self.fill_color}] {path};"
+			if not self.fill: return ""
+
+		if self.line:
+
+			options = []
+			if self.line_color: options.append(self.line_color)
+			if self.line_width: options.append(self.line_width.value)
+			if self.line_join: options.append(f"line join={self.line_join.value}")
+			if self.fill: options.append(f"fill={self.fill_color}")
+			options = f"[{', '.join(options)}]" if options else ""
+
+			return f"\\draw{options} {path};"

@@ -26,7 +26,7 @@ class LatexFigure:
 
     def draw(self, drawable):
         # parse drawable object and appends it to the string
-        self.append_string('{data}\n'.format(data=drawable.build_tikz_string()))
+        self.append_string(f"{str(drawable)}\n")
 
     def write_data(self):
         f = open(self.paths['data'], 'w')
