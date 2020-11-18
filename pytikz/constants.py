@@ -1,19 +1,21 @@
+from enum import Enum
 
-# shorthands for line widths in tikz
-LINE_WIDTHS = [
-    'ultra thin',
-    'very thin',
-    'thin',
-    'semithick',
-    'thick',
-    'very thick',
-    'ultra thick'
-]
-LINE_JOINS = [
-    'miter',
-    'bevel',
-    'round'
-]
 
-# default fill color for this package
-DEFAULT_FILL_COLOR = 'yellow'
+class LineWidth(Enum):
+    ULTRA_THIN = "ultra thin"
+    VERY_THIN = "very thin"
+    THIN = "thin"
+    SEMITHICK = "semithick"
+    THICK = "thick"
+    VERY_THICK = "very thick"
+    ULTRA_THICK = "ultra thick"
+
+
+class LineJoin(Enum):
+    MITER = "miter"
+    BEVEL = "bevel"
+    ROUND = "round"
+
+
+# # default fill color for this package
+# DEFAULT_FILL_COLOR = "yellow"

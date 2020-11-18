@@ -4,3 +4,4 @@ from .shape.circle import Circle
 from .shape.grid import Grid
 from .shape.rectangle import Rectangle
 from .path import *
+from .constants import *
