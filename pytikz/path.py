@@ -1,5 +1,3 @@
-from pprint import pprint
-from .constants import *
 from .vector import Vector
 
 
@@ -22,39 +20,56 @@ class Path:
 		path.cycle = True
 		return path
 
+	def __getitem__(self, arg):
+		if self.anchor is None:
+			return self._vector_list[arg]
+		else:
+			return self.anchor + self._vector_list[arg]
+
+	def __iter__(self):
+		for k in range(len(self._vector_list)):
+			yield self[k]
+
+	@property
+	def anchor(self):
+		return self._anchor
+
 	def __str__(self):
-		path_string = " -- ".join([str(v) for v in self._vector_list])
+		path_string = " -- ".join([str(v) for v in self])
 		if self.cycle:
 			path_string += " -- cycle"
 		return path_string
 
+	def __eq__(self, other):
+		if type(other) != Path: return False
+		return self._vector_list == other._vector_list \
+			and self.anchor == other.anchor \
+			and self.cycle == other.cycle
 
-class Drawable:
-	line = True
-	line_color = None
-	line_width = None
-	line_join = None
+	def copy(self):
+		path = Path(self._vector_list, self.anchor)
+		path.cycle = self.cycle
+		return path
 
-	fill = False
-	fill_color = None
+	def apply(self, callback):
+		path = self.copy()
+		if path.anchor is None:
+			path._vector_list = [callback(v) for v in self]
+		else:
+			path._anchor = callback(path.anchor)
+		return path
 
-	def __init__(self, path):
-		self.path = path
+	def __add__(self, other):
+		return self.apply(lambda v: v + other)
 
-	def __str__(self):
-		if self.fill: assert self.path.cycle
+	def __neg__(self):
+		return self.apply(lambda v: -v)
 
-		if not self.line:
-			if self.fill: return f"\\fill[{self.fill_color}] {self.path};"
-			if not self.fill: return ""
+	def __sub__(self, other):
+		return self + (-other)
 
-		if self.line:
+	def __rmul__(self, other):
+		return self.apply(lambda v: other * v)
 
-			options = []
-			if self.line_color: options.append(self.line_color)
-			if self.line_width: options.append(self.line_width.value)
-			if self.line_join: options.append(f"line join={self.line_join.value}")
-			if self.fill: options.append(f"fill={self.fill_color}")
-			options = f"[{', '.join(options)}]" if options else ""
-
-			return f"\\draw{options} {self.path};"
+	def __matmul__(self, other):
+		return self.apply(lambda v: v @ other)

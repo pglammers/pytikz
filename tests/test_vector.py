@@ -44,3 +44,5 @@ def test_vector():
 	assert 2 * a == g
 
 	assert a @ ar == Vector(19, 2)
+
+	assert a != None and a != 1

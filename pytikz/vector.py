@@ -33,6 +33,7 @@ class Vector:
 		return f"({', '.join(str(c) for c in self._coordinates)})"
 
 	def __eq__(self, other):
+		if type(other) != Vector: return False
 		return self.dim == other.dim and self._coordinates == other._coordinates
 
 	def __add__(self, other):
