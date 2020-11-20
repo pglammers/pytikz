@@ -1,33 +1,14 @@
 from pprint import pprint
 from .constants import *
-
-
-class Vector:
-	def __init__(self, *args):
-		self._coordinates = list(args)
-		self._dim = len(self._coordinates)
-
-	@property
-	def x(self):
-		return self._coordinates[0]
-
-	@property
-	def y(self):
-		return self._coordinates[1]
-
-	@property
-	def z(self):
-		return self._coordinates[2]
-
-	def __str__(self):
-		return f"({', '.join(str(c) for c in self._coordinates)})"
+from .vector import Vector
 
 
 class Path:
 	cycle = False
 
-	def __init__(self, vector_list):
+	def __init__(self, vector_list, anchor=None):
 		self._vector_list = vector_list
+		self._anchor = anchor
 
 	@classmethod
 	def rectangle(self, left, right, lower, upper):
@@ -48,7 +29,7 @@ class Path:
 		return path_string
 
 
-class DrawablePath(Path):
+class Drawable:
 	line = True
 	line_color = None
 	line_width = None
@@ -57,13 +38,14 @@ class DrawablePath(Path):
 	fill = False
 	fill_color = None
 
-	def __str__(self):
-		if self.fill: assert self.cycle
+	def __init__(self, path):
+		self.path = path
 
-		path = super().__str__()
+	def __str__(self):
+		if self.fill: assert self.path.cycle
 
 		if not self.line:
-			if self.fill: return f"\\fill[{self.fill_color}] {path};"
+			if self.fill: return f"\\fill[{self.fill_color}] {self.path};"
 			if not self.fill: return ""
 
 		if self.line:
@@ -75,4 +57,4 @@ class DrawablePath(Path):
 			if self.fill: options.append(f"fill={self.fill_color}")
 			options = f"[{', '.join(options)}]" if options else ""
 
-			return f"\\draw{options} {path};"
+			return f"\\draw{options} {self.path};"
