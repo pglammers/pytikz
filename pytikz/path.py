@@ -1,7 +1,39 @@
+from abc import ABC, abstractmethod
 from .vector import Vector
 
 
-class Path:
+class Shape(ABC):
+
+	@abstractmethod
+	def __str__(self):
+		pass
+
+	@abstractmethod
+	def copy(self):
+		pass
+
+	@abstractmethod
+	def apply(self, callback):
+		pass
+
+	def __add__(self, other):
+		return self.apply(lambda v: v + other)
+
+	def __neg__(self):
+		return self.apply(lambda v: -v)
+
+	def __sub__(self, other):
+		return self + (-other)
+
+	def __rmul__(self, other):
+		return self.apply(lambda v: other * v)
+
+	def __matmul__(self, other):
+		return self.apply(lambda v: v @ other)
+
+
+class Path(Shape):
+
 	cycle = False
 
 	def __init__(self, vector_list, anchor=None):
@@ -58,18 +90,3 @@ class Path:
 		else:
 			path._anchor = callback(path.anchor)
 		return path
-
-	def __add__(self, other):
-		return self.apply(lambda v: v + other)
-
-	def __neg__(self):
-		return self.apply(lambda v: -v)
-
-	def __sub__(self, other):
-		return self + (-other)
-
-	def __rmul__(self, other):
-		return self.apply(lambda v: other * v)
-
-	def __matmul__(self, other):
-		return self.apply(lambda v: v @ other)
