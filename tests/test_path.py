@@ -23,14 +23,14 @@ def test_path():
 	assert [v for v in p2] == [a+a, b+a, c+a]
 	assert str(p2) == "(2, 4) -- (4, 7) -- (10, 6)"
 
-	p1.cycle = True
+	p1 = Path([a,b,c], cycle=True)
 	assert str(p1) == "(1, 2) -- (3, 5) -- (9, 4) -- cycle"
 
 	assert p1 != p2
 
-	assert p1.copy() == p1
-	p1_mod = p1.copy()
-	p1_mod.cycle = False
+	assert p1._copy() == p1
+	p1_mod = p1._copy()
+	p1_mod._cycle = False
 	assert p1_mod != p1
 
 	p1 = Path([a,b,c])

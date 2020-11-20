@@ -9,7 +9,7 @@ class Shape(ABC):
 		pass
 
 	@abstractmethod
-	def copy(self):
+	def _copy(self):
 		pass
 
 	@abstractmethod
@@ -34,23 +34,20 @@ class Shape(ABC):
 
 class Path(Shape):
 
-	cycle = False
-
-	def __init__(self, vector_list, anchor=None):
+	def __init__(self, vector_list, anchor=None, cycle=False):
 		self._vector_list = vector_list
 		self._anchor = anchor
+		self._cycle = cycle
 
 	@classmethod
-	def rectangle(self, left, right, lower, upper):
+	def rectangle(self, left, right, lower, upper, anchor=None):
 		vector_list = [
 			Vector(left, lower),
 			Vector(left, upper),
 			Vector(right, upper),
 			Vector(right, lower)
 		]
-		path = self(vector_list)
-		path.cycle = True
-		return path
+		return self(vector_list, anchor, True)
 
 	def __getitem__(self, arg):
 		if self.anchor is None:
@@ -66,6 +63,10 @@ class Path(Shape):
 	def anchor(self):
 		return self._anchor
 
+	@property
+	def cycle(self):
+		return self._cycle
+
 	def __str__(self):
 		path_string = " -- ".join([str(v) for v in self])
 		if self.cycle:
@@ -78,13 +79,11 @@ class Path(Shape):
 			and self.anchor == other.anchor \
 			and self.cycle == other.cycle
 
-	def copy(self):
-		path = Path(self._vector_list, self.anchor)
-		path.cycle = self.cycle
-		return path
+	def _copy(self):
+		return Path(self._vector_list, self.anchor, self.cycle)
 
 	def apply(self, callback):
-		path = self.copy()
+		path = self._copy()
 		if path.anchor is None:
 			path._vector_list = [callback(v) for v in self]
 		else:
