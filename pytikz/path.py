@@ -4,6 +4,8 @@ from .vector import Vector
 
 class Shape(ABC):
 
+	cycle = False
+
 	@abstractmethod
 	def __str__(self):
 		pass

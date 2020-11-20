@@ -52,3 +52,11 @@ def test_path():
 	p3 = Path([a,b,c], a @ ar)
 	assert Path([a,b,c],a) @ ar == p3
 	assert Path([a,b,c])@ ar == Path([a@ar, b@ar, c@ar])
+
+	rect = Path.rectangle(0,1,2,3)
+	assert rect == Path([
+		Vector(0,2),
+		Vector(0,3),
+		Vector(1,3),
+		Vector(1,2)
+	], cycle=True)
