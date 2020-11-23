@@ -29,6 +29,12 @@ class View:
 			yield drawable.apply(self.transformation)
 
 
+class IdentityProjection(Projection):
+
+	def transformation(self, vector):
+		return vector
+
+
 class ScaleProjection(Projection):
 
     def __init__(self, units=Vector(1, 1), origin_position=Vector(0, 0)):
@@ -36,4 +42,4 @@ class ScaleProjection(Projection):
         self.origin_position = origin_position
 
     def transformation(self, vector):
-        return (vector - self.origin_position) @ np.diag(1. / self.units) 
+        return (vector - self.origin_position) @ np.diag(1. / self.units)
