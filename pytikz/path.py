@@ -71,7 +71,8 @@ class Path(Shape):
             yield self[k]
 
     def __str__(self):
-        return str(np.array([v for v in self]))
+        cycle = " -- cycle" if self.cycle else ""
+        return f"{str(np.array([v for v in self]))}{cycle}"
 
     def copy(self):
         return Path(self.vector_list, self.cycle, self.anchor)
