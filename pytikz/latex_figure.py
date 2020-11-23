@@ -36,26 +36,22 @@ class LatexFigure:
     def write_standalone(self):
         f = open(self.paths['standalone'], 'w')
         f.write(
-            """
-            \\documentclass[preview]{{standalone}}
-            \\usepackage{{tikz}}
-            \\begin{{document}}
-            \\begin{{tikzpicture}}
-            \\input{{{file}}}
-            \\end{{tikzpicture}}
-            \\end{{document}}
-            """.format(file=self.paths['data'])
+            "\\documentclass[preview]{standalone}\n"
+            "\\usepackage{tikz}\n"
+            "\\begin{document}\n"
+            "\\begin{tikzpicture}\n"
+            f"\\input{{{self.paths['data']}}}\n"
+            "\\end{tikzpicture}\n"
+            "\\end{document}\n"
         )
         f.close()
 
     def write_include(self):
         f = open(self.paths['include'], 'w')
         f.write(
-            """
-            \\begin{{tikzpicture}}
-            \\input{{{file}}}
-            \\end{{tikzpicture}}
-            """.format(file=self.paths['data'])
+            "\\begin{tikzpicture}\n"
+            f"\\input{{{self.paths['data']}}}\n"
+            "\\end{tikzpicture}\n"
         )
         f.close()
 
