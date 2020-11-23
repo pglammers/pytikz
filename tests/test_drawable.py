@@ -3,7 +3,7 @@ import pytest
 from pytikz import Vector, Path, Drawable, LineWidth, LineJoin
 
 
-def test_drawable():
+def teast_draawable():
 	p = Path([Vector(0), Vector(1)])
 	d = Drawable(p)
 	assert str(d) == '\\draw (0) -- (1);'
