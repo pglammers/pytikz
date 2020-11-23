@@ -10,12 +10,12 @@ class LatexFigure:
             os.makedirs(save_dir)
         self.paths = {
             'dir': save_dir,
-            'data':       os.path.join(save_dir, fig_name + '_data.tex'),
-            'standalone': os.path.join(save_dir, fig_name + '_standalone.tex'),
-            'include':    os.path.join(save_dir, fig_name + '_include.tex'),
+            'data':       os.path.join(save_dir, f'{fig_name}_data.tex'),
+            'standalone': os.path.join(save_dir, f'{fig_name}_standalone.tex'),
+            'include':    os.path.join(save_dir, f'{fig_name}_include.tex'),
             'standalone_aux': [
-                os.path.join(save_dir, fig_name + '_standalone.aux'),
-                os.path.join(save_dir, fig_name + '_standalone.log')
+                os.path.join(save_dir, f'{fig_name}_standalone.aux'),
+                os.path.join(save_dir, f'{fig_name}_standalone.log')
             ]
         }
         self._string = ''
