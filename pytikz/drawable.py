@@ -1,4 +1,32 @@
+from abc import ABC, abstractmethod
+
+
+class AbstractDrawer(ABC):
+
+	@abstractmethod
+	def draw(self, shape):
+		pass
+
+
 class Drawable:
+
+	def __init__(self, drawer, shape):
+		self.drawer = drawer
+		self.shape = shape
+
+	def copy(self):
+		return Drawable(self.drawer, self.shape.copy())
+
+	def apply(self, transformation):
+		drawable = self.copy()
+		drawable.shape.apply(transformation)
+		return drawable
+
+	def __str__(self):
+		return self.drawer.draw(self.shape)
+
+
+class Drawer(AbstractDrawer):
 	line = True
 	line_color = None
 	line_width = None
@@ -7,14 +35,11 @@ class Drawable:
 	fill = False
 	fill_color = None
 
-	def __init__(self, shape):
-		self.shape = shape
-
-	def __str__(self):
-		if self.fill: assert self.shape.cycle
+	def draw(self, shape):
+		if self.fill: assert shape.cycle
 
 		if not self.line:
-			if self.fill: return f"\\fill[{self.fill_color}] {self.shape};"
+			if self.fill: return f"\\fill[{self.fill_color}] {shape};"
 			if not self.fill: return ""
 
 		if self.line:
@@ -26,8 +51,4 @@ class Drawable:
 			if self.fill: options.append(f"fill={self.fill_color}")
 			options = f"[{', '.join(options)}]" if options else ""
 
-			return f"\\draw{options} {self.shape};"
-
-	def apply(self, callable):
-		self.shape.apply(callable)
-		return self
+			return f"\\draw{options} {shape};"
