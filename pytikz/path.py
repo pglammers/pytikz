@@ -27,21 +27,6 @@ class Shape(ABC):
             self.anchor = callback(self.anchor)
         return self
 
-    def __add__(self, other):
-        return self.copy().apply(lambda v: v + other)
-
-    def __neg__(self):
-        return self.copy().apply(lambda v: -v)
-
-    def __sub__(self, other):
-        return self + (-other)
-
-    def __rmul__(self, other):
-        return self.copy().apply(lambda v: other * v)
-
-    def __matmul__(self, other):
-        return self.copy().apply(lambda v: v @ other)
-
 
 class Path(Shape):
 

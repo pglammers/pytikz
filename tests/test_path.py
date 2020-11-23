@@ -14,23 +14,19 @@ def test_path():
 	assert str(p1) == "(1, 2) -- (3, 5) -- (9, 4)"
 
 	# Test immutability under operators
-	p1 + a
-	p1 - (2 * a)
-	p1 @ a.transpose()
-	10 * p1
 	assert str(p1) == "(1, 2) -- (3, 5) -- (9, 4)"
 
 	# Test addition
-	p2 = p1 + a
+	p2 = p1.copy().apply(lambda v: v+a)
 	assert str(p2) == "(2, 4) -- (4, 7) -- (10, 6)"
 
 	# Test multiplication
-	p2 = 2 * p1
+	p2 = p1.copy().apply(lambda v: 2*v)
 	assert str(p2) == "(2, 4) -- (6, 10) -- (18, 8)"
 
 	# Test anchor presence
 	p1.anchor = Vector(1, 1)
-	p2 = p1 + a
+	p2 = p1.copy().apply(lambda v: v+a)
 	assert str(p2) == "(3, 5) -- (5, 8) -- (11, 7)"
-	p2 = 2 * p1
+	p2 = p1.copy().apply(lambda v: 2*v)
 	assert str(p2) == "(3, 4) -- (5, 7) -- (11, 6)"
