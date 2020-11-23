@@ -1,60 +1,17 @@
-import numpy as np
+import numpy
 
 
-class Vector:
-	def __init__(self, *args):
-		self._coordinates = np.array(list(args))
+def _tikz_representation(array):
+	if array.ndim == 1:
+		return f"({', '.join([str(c) for c in array])})"
+	elif array.ndim == 2:
+		return " -- ".join(str(v) for v in array)
+	else:
+		raise ValueError(f"Arrays of dimension {array.ndim} have no TikZ representation.") 
 
-	@classmethod
-	def _np(self, np_array):
-		vector = self()
-		vector._coordinates = np_array
-		return vector
 
-	def __getitem__(self, arg):
-		return self._coordinates[arg]
+numpy.set_string_function(_tikz_representation, False)
 
-	def __iter__(self):
-		for c in self._coordinates:
-			yield c
 
-	@property
-	def x(self):
-		return self._coordinates[0]
-
-	@property
-	def y(self):
-		return self._coordinates[1]
-
-	@property
-	def z(self):
-		return self._coordinates[2]
-
-	@property
-	def dim(self):
-		return self._coordinates.shape[0]
-
-	def __str__(self):
-		return f"({', '.join(str(c) for c in self._coordinates)})"
-
-	def __eq__(self, other):
-		if type(other) != Vector: return False
-		if self.dim != other.dim: return False
-		return np.all(self._coordinates == other._coordinates)
-
-	def __add__(self, other):
-		if type(other) != Vector: raise ValueError("Cannot add a Vector to a non-Vector.")
-		if self.dim != other.dim: raise ValueError("The dimensions of the two vectors must be the same.")
-		return Vector._np(self._coordinates + other._coordinates)
-
-	def __neg__(self):
-		return Vector._np(-self._coordinates)
-
-	def __sub__(self, other):
-		return self + (-other)
-
-	def __rmul__(self, other):
-		return Vector._np(other * self._coordinates)
-
-	def __matmul__(self, other):
-		return Vector._np(self._coordinates @ other)
+def Vector(*args):
+	return numpy.array(list(args))
