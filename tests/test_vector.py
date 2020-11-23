@@ -30,10 +30,17 @@ def test_vector():
 
 	assert a.dim == 3 and d.dim == 2
 
+	with pytest.raises(ValueError):
+		a + d
+
+	with pytest.raises(ValueError):
+		a + 'a'
+
 	assert str(a) == "(1, 2, 3)"
 
 	assert a == Vector(1, 2, 3)
 	assert a != b
+	assert a != d
 
 	assert a + b == c
 

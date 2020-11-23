@@ -3,8 +3,13 @@ import numpy as np
 
 class Vector:
 	def __init__(self, *args):
-		self._coordinates = list(args)
-		self._dim = len(self._coordinates)
+		self._coordinates = np.array(list(args))
+
+	@classmethod
+	def _np(self, np_array):
+		vector = self()
+		vector._coordinates = np_array
+		return vector
 
 	def __getitem__(self, arg):
 		return self._coordinates[arg]
@@ -27,27 +32,29 @@ class Vector:
 
 	@property
 	def dim(self):
-		return self._dim
+		return self._coordinates.shape[0]
 
 	def __str__(self):
 		return f"({', '.join(str(c) for c in self._coordinates)})"
 
 	def __eq__(self, other):
 		if type(other) != Vector: return False
-		return self.dim == other.dim and self._coordinates == other._coordinates
+		if self.dim != other.dim: return False
+		return np.all(self._coordinates == other._coordinates)
 
 	def __add__(self, other):
-		assert self.dim == other.dim
-		return Vector(*[a + b for a, b in zip(self, other)])
+		if type(other) != Vector: raise ValueError("Cannot add a Vector to a non-Vector.")
+		if self.dim != other.dim: raise ValueError("The dimensions of the two vectors must be the same.")
+		return Vector._np(self._coordinates + other._coordinates)
 
 	def __neg__(self):
-		return Vector(*[-a for a in self])
+		return Vector._np(-self._coordinates)
 
 	def __sub__(self, other):
 		return self + (-other)
 
 	def __rmul__(self, other):
-		return Vector(*[other * a for a in self])
+		return Vector._np(other * self._coordinates)
 
 	def __matmul__(self, other):
-		return Vector(*(np.array([a for a in self]) @ other))
+		return Vector._np(self._coordinates @ other)
