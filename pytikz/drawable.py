@@ -27,3 +27,7 @@ class Drawable:
 			options = f"[{', '.join(options)}]" if options else ""
 
 			return f"\\draw{options} {self.shape};"
+
+	def apply(self, callable):
+		self.shape.apply(callable)
+		return self
