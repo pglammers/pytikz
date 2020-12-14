@@ -3,4 +3,4 @@ Generate TikZ figures directly from within Python
 
 ##
 To-do:
-- [ ] Unit tests
+- [ ] unit_test for view.py
