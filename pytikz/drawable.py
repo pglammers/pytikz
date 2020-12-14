@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from .shape import Shape
 
 
 class AbstractDrawer(ABC):
@@ -22,6 +23,8 @@ class Drawable:
     """
 
     def __init__(self, drawer, shape):
+        assert issubclass(type(drawer), AbstractDrawer)
+        assert issubclass(type(shape), Shape)
         self.drawer = drawer
         self.shape = shape
 
