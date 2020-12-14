@@ -1,41 +1,24 @@
-from abc import ABC, abstractmethod
-import numpy as np
-
-from .vector import Vector
-
-
-class Projection(ABC):
-    @abstractmethod
-    def transformation(self, vector):
-        pass
-
-
 class View:
-    def __init__(self, projection):
-        assert issubclass(type(projection), Projection)
-        self.projection = projection
+    """Bundles a list of drawables with a common transformation."""
+
+    def __init__(self, transformation = lambda vector: vector):
+        self.transformation = transformation
         self.drawables = []
 
-    def transformation(self, vector):
-        return self.projection.transformation(vector)
+    def compose(self, transformation):
+        """Compose the internal transformation with a new transformation."""
+        transformation_original = self.transformation
+        self.transformation = lambda vector: transformation(transformation_original(vector))
 
     def append(self, drawable):
+        """Appends a drawable to the internal list."""
         self.drawables.append(drawable)
 
+    def __getitem__(self, k):
+        """Returns the transformed version of the k-th drawable."""
+        return self.drawables[k].copy().apply(self.transformation)
+
     def __iter__(self):
-        for drawable in self.drawables:
-            yield drawable.apply(self.transformation)
-
-
-class IdentityProjection(Projection):
-    def transformation(self, vector):
-        return vector
-
-
-class ScaleProjection(Projection):
-    def __init__(self, units=Vector(1, 1), origin_position=Vector(0, 0)):
-        self.units = units
-        self.origin_position = origin_position
-
-    def transformation(self, vector):
-        return (vector - self.origin_position) @ np.diag(1.0 / self.units)
+        """Iterates over the transformed drawables."""
+        for k in len(self.drawables):
+            yield self[k]
