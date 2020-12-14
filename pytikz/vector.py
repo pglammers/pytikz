@@ -7,7 +7,9 @@ def _tikz_representation(array):
     elif array.ndim == 2:
         return " -- ".join(str(v) for v in array)
     else:
-        raise ValueError(f"Arrays of dimension {array.ndim} have no TikZ representation.")
+        raise ValueError(
+            f"Arrays of dimension {array.ndim} have no TikZ representation."
+        )
 
 
 numpy.set_string_function(_tikz_representation, False)

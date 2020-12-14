@@ -9,16 +9,16 @@ class LatexFigure:
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         self.paths = {
-            'dir': save_dir,
-            'data':       os.path.join(save_dir, f'{fig_name}_data.tex'),
-            'standalone': os.path.join(save_dir, f'{fig_name}_standalone.tex'),
-            'include':    os.path.join(save_dir, f'{fig_name}_include.tex'),
-            'standalone_aux': [
-                os.path.join(save_dir, f'{fig_name}_standalone.aux'),
-                os.path.join(save_dir, f'{fig_name}_standalone.log')
-            ]
+            "dir": save_dir,
+            "data": os.path.join(save_dir, f"{fig_name}_data.tex"),
+            "standalone": os.path.join(save_dir, f"{fig_name}_standalone.tex"),
+            "include": os.path.join(save_dir, f"{fig_name}_include.tex"),
+            "standalone_aux": [
+                os.path.join(save_dir, f"{fig_name}_standalone.aux"),
+                os.path.join(save_dir, f"{fig_name}_standalone.log"),
+            ],
         }
-        self._string = ''
+        self._string = ""
 
     def append_string(self, data: str):
         # appends data to the data.tex file
@@ -29,12 +29,12 @@ class LatexFigure:
         self.append_string(f"{str(drawable)}\n")
 
     def write_data(self):
-        f = open(self.paths['data'], 'w')
+        f = open(self.paths["data"], "w")
         f.write(self._string)
         f.close()
 
     def write_standalone(self):
-        f = open(self.paths['standalone'], 'w')
+        f = open(self.paths["standalone"], "w")
         f.write(
             "\\documentclass[preview]{standalone}\n"
             "\\usepackage{tikz}\n"
@@ -47,7 +47,7 @@ class LatexFigure:
         f.close()
 
     def write_include(self):
-        f = open(self.paths['include'], 'w')
+        f = open(self.paths["include"], "w")
         f.write(
             "\\begin{tikzpicture}\n"
             f"\\input{{{self.paths['data']}}}\n"
@@ -56,15 +56,16 @@ class LatexFigure:
         f.close()
 
     def cleanup(self):
-        for file_name in self.paths['standalone_aux']:
+        for file_name in self.paths["standalone_aux"]:
             os.remove(file_name)
 
     def update(self, cleanup=True):
         self.write_data()
-        os.system('pdflatex -output-directory={dir} {tex_file}'.format(
-            tex_file=self.paths['standalone'],
-            dir=self.paths['dir']
-        ))
+        os.system(
+            "pdflatex -output-directory={dir} {tex_file}".format(
+                tex_file=self.paths["standalone"], dir=self.paths["dir"]
+            )
+        )
         if cleanup:
             self.cleanup()
 

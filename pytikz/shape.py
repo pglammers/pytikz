@@ -29,7 +29,6 @@ class Shape(ABC):
 
 
 class Path(Shape):
-
     def __init__(self, vector_list, cycle=False, anchor=None):
         self.vector_list = vector_list
         self.cycle = cycle
@@ -41,7 +40,7 @@ class Path(Shape):
             Vector(left, lower),
             Vector(left, upper),
             Vector(right, upper),
-            Vector(right, lower)
+            Vector(right, lower),
         ]
         return self(vector_list, True, anchor)
 
