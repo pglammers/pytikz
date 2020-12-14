@@ -1,14 +1,16 @@
 class View:
     """Bundles a list of drawables with a common transformation."""
 
-    def __init__(self, transformation = lambda vector: vector):
+    def __init__(self, transformation=lambda vector: vector):
         self.transformation = transformation
         self.drawables = []
 
     def compose(self, transformation):
         """Compose the internal transformation with a new transformation."""
         transformation_original = self.transformation
-        self.transformation = lambda vector: transformation(transformation_original(vector))
+        self.transformation = lambda vector: transformation(
+            transformation_original(vector)
+        )
 
     def append(self, drawable):
         """Appends a drawable to the internal list."""
