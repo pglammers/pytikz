@@ -15,11 +15,11 @@ class AbstractList(ABC):
         self._list.append(item)
 
     @abstractmethod
-    def view(self, item):
+    def _view(self, item):
         pass
 
     def __getitem__(self, k):
-        return self.view(self._list[k])
+        return self._view(self._list[k])
 
     def __iter__(self):
         for k in range(len(self._list)):

@@ -9,7 +9,7 @@ def test_abstract():
         def __init__(self):
             self._list = []
 
-        def view(self, item):
+        def _view(self, item):
             return item + 1
 
     l = TestList()
