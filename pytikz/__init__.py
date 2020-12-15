@@ -4,3 +4,4 @@ from .shape import Path
 from .drawable import Drawable, Drawer
 from .view import View
 from .constants import *
+from .abstract import *
