@@ -8,9 +8,7 @@ class Shape(AbstractObject):
     """Abstract Shape class.
 
     Instances of subclasses must describe the abstract information of a shape.
-    They must also be able to handle a transformation which maps the shape to another vector space.
-    If the instance has an anchor, then the transformation is applied only to this anchor,
-    not the full shape.
+    The .cycle property encodes if a shape is closed (and thus fillable) or not.
     """
 
     cycle = False
@@ -48,11 +46,12 @@ class Path(Shape, AbstractList):
         return Path(self._list, self.cycle, self.anchor)
 
     def apply_internally(self, transformation):
-        """Applies the transformation to the vectors in .vector_list."""
+        """Applies the transformation to the vectors in ._list."""
         self._list = [transformation(v) for v in self._list]
 
 
 class Circle(Shape):
+    """Class for describing a geometrical circle."""
 
     cycle = True
 
