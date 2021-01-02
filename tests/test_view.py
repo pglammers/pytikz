@@ -14,11 +14,3 @@ def test_view():
     v.append(o2)
     assert str(v[0]) == str(o1) == "\\draw (1) -- (2);"
     assert str(v[1]) == str(o2) == "\\draw (2) -- (3);"
-
-    v.compose(lambda x: -x)
-    assert str(v[0]) == "\\draw (-1) -- (-2);"
-    assert str(v[1]) == "\\draw (0) -- (1);"
-
-    v.compose(lambda x: x + 1)
-    assert str(v[0]) == "\\draw (0) -- (-1);"
-    assert str(v[1]) == "\\draw (1) -- (2);"
