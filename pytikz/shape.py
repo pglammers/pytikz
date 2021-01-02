@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 import numpy as np
 from .vector import Vector, VectorType
-from .abstract import AbstractList
+from .abstract import AbstractList, AbstractObject
 
 
-class Shape(ABC):
+class Shape(AbstractObject):
     """Abstract Shape class.
 
     Instances of subclasses must describe the abstract information of a shape.
@@ -14,33 +14,6 @@ class Shape(ABC):
     """
 
     cycle = False
-    anchor = None
-
-    @abstractmethod
-    def __str__(self):
-        pass
-
-    @abstractmethod
-    def copy(self):
-        pass
-
-    @abstractmethod
-    def apply_internally(self, transformation):
-        pass
-
-    def apply(self, transformation):
-        """Distributes the application of the transformation."""
-        if self.anchor is None:
-            self.apply_internally(transformation)
-        else:
-            self.anchor = transformation(self.anchor)
-        return self
-
-    def _view(self, item):
-        if self.anchor is None:
-            return item
-        else:
-            return self.anchor + item
 
 
 class Path(Shape, AbstractList):
