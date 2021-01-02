@@ -28,6 +28,22 @@ class AbstractList(ABC):
             yield self[k]
 
 
+class AbstractDrawable(ABC):
+    """Abstract class for any object that can be drawn directly on the canvas."""
+
+    @abstractmethod
+    def copy(self):
+        pass
+
+    @abstractmethod
+    def apply(self, transformation):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
 class AbstractObject(ABC):
     """Abstract class for any object eventually appearing on the canvas.
 

@@ -1,12 +1,12 @@
 import pytest
 
-from pytikz import Vector, Path, Drawable, Drawer, LineWidth, LineJoin
+from pytikz import Vector, Path, DrawableShape, ShapeStyle, LineWidth, LineJoin
 
 
 def test_drawable():
     p = Path([Vector(0), Vector(1)])
-    l = Drawer()
-    d = Drawable(l, p)
+    l = ShapeStyle()
+    d = DrawableShape(p, l)
     assert str(d) == "\\draw (0) -- (1);"
 
     l.fill = True
