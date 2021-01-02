@@ -2,6 +2,20 @@ from abc import ABC, abstractmethod
 from .shape import Shape
 
 
+class AbstractDrawable(ABC):
+    @abstractmethod
+    def copy(self):
+        pass
+
+    @abstractmethod
+    def apply(self, transformation):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
 class AbstractDrawer(ABC):
     """Abstract Drawer class.
 
@@ -14,7 +28,7 @@ class AbstractDrawer(ABC):
         pass
 
 
-class Drawable:
+class Drawable(AbstractDrawable):
     """Class for drawables containing both shape and style information.
 
     Args:
