@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from .vector import Vector
+from .vector import Vector, VectorType
+from .abstract import AbstractList
 
 
 class Shape(ABC):
@@ -36,13 +37,23 @@ class Shape(ABC):
         return self
 
 
-class Path(Shape):
+class Path(Shape, AbstractList):
     """Class for describing straight lines connecting a sequence of vectors."""
 
+    _type = VectorType
+
     def __init__(self, vector_list, cycle=False, anchor=None):
-        self.vector_list = vector_list
+        self._list = []
+        for vector in vector_list:
+            self.append(vector)
         self.cycle = cycle
         self.anchor = anchor
+
+    def _view(self, item):
+        if self.anchor is None:
+            return item
+        else:
+            return self.anchor + item
 
     @classmethod
     def rectangle(self, left, right, lower, upper, anchor=None):
@@ -55,26 +66,14 @@ class Path(Shape):
         ]
         return self(vector_list, True, anchor)
 
-    def __getitem__(self, arg):
-        """Returns the anchor-shifted version of the n-th vector."""
-        if self.anchor is None:
-            return self.vector_list[arg]
-        else:
-            return self.anchor + self.vector_list[arg]
-
-    def __iter__(self):
-        """Iterates k over .__getitem__[k]."""
-        for k in range(len(self.vector_list)):
-            yield self[k]
-
     def __str__(self):
         """Generates the path string, using the custom np.ndarray.__str__ method."""
         cycle = " -- cycle" if self.cycle else ""
         return f"{str(np.array([v for v in self]))}{cycle}"
 
     def copy(self):
-        return Path(self.vector_list, self.cycle, self.anchor)
+        return Path(self._list, self.cycle, self.anchor)
 
     def apply_internally(self, transformation):
         """Applies the transformation to the vectors in .vector_list."""
-        self.vector_list = [transformation(v) for v in self.vector_list]
+        self._list = [transformation(v) for v in self._list]

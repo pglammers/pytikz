@@ -21,3 +21,6 @@ np.set_string_function(
 def Vector(*args):
     """Generates a vector; used to control its generation."""
     return np.array(list(args))
+
+
+VectorType = type(Vector())
