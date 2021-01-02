@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class AbstractList(ABC):
+    """Wrapped list which transforms elements through the .view method upon access."""
+
     _type = None
     _list = None
 
@@ -27,6 +29,11 @@ class AbstractList(ABC):
 
 
 class AbstractObject(ABC):
+    """Abstract class for any object eventually appearing on the canvas.
+
+    Features the .anchor property, which allows only the relative position rather than the whole object to be transformed by the .apply method.
+    """
+
     anchor = None
 
     @abstractmethod
