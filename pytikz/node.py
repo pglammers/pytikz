@@ -18,4 +18,4 @@ class Node(AbstractObject, AbstractDrawable):
         self._position = transformation(self._position)
 
     def copy(self):
-        return Node(self, self._position, self.text, self.anchor)
+        return Node(self._position, self.text, self.anchor)
