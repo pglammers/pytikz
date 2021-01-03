@@ -79,7 +79,7 @@ class HexLip:
 np.random.seed(1)
 
 
-n = 12
+n = 10
 sim = HexLip(n)
 sim.mcmc(10 ** 6)
 
@@ -96,8 +96,10 @@ for x, y in sim.iterate_vertices():
 
 
 fig = pt.LatexFigure("figure", os.path.dirname(__file__))
-for o in view:
-    fig.draw(o)
+
+view.clip = pt.shape.Path.rectangle(1 / 2, n - 3 / 2, 1 / 2, n - 3 / 2)
+
+fig.draw(view)
 
 
 fig.build()
