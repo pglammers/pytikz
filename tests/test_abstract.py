@@ -2,7 +2,7 @@ import pytikz, pytest
 
 
 def test_abstract():
-    class TestList(pytikz.AbstractList):
+    class TestList(pytikz.abstract.AbstractList):
 
         _type = int
 
