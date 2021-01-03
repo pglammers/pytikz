@@ -17,7 +17,7 @@ class View(AbstractList):
 
     def wrap_clip(self, text):
         if self.clip is None:
-            return data
+            return text
         else:
             if not issubclass(type(self.clip), Shape):
                 raise TypeError
