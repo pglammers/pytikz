@@ -7,7 +7,6 @@ class AbstractList(ABC):
     _type = None
     _list = None
 
-    @abstractmethod
     def __init__(self):
         self._list = []
 
@@ -32,7 +31,7 @@ class AbstractDrawable(ABC):
     """Abstract class for any object that can be drawn directly on the canvas."""
 
     @abstractmethod
-    def copy(self):
+    def __str__(self):
         pass
 
     @abstractmethod
@@ -40,7 +39,7 @@ class AbstractDrawable(ABC):
         pass
 
     @abstractmethod
-    def __str__(self):
+    def copy(self):
         pass
 
 
@@ -54,10 +53,6 @@ class AbstractObject(ABC):
 
     @abstractmethod
     def __str__(self):
-        pass
-
-    @abstractmethod
-    def copy(self):
         pass
 
     @abstractmethod
@@ -77,3 +72,7 @@ class AbstractObject(ABC):
             return item
         else:
             return self.anchor + item
+
+    @abstractmethod
+    def copy(self):
+        pass
