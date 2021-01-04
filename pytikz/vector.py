@@ -31,6 +31,9 @@ class VectorLike(ABC):
     def vector(self):
         pass
 
+    def __str__(self):
+        return str(self.vector)
+
 
 def Vector(*args):
     """Generates a vector; used to control its generation."""
@@ -137,9 +140,6 @@ class AnchoredVector(VectorLike, AnchoredObject, Transformable):
     @property
     def vector(self):
         return self.anchor_resolve(self.offset)
-
-    def __str__(self):
-        return str(self.vector)
 
     def copy(self):
         return AnchoredVector(self.anchor, self.offset)
