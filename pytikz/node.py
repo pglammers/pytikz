@@ -1,5 +1,5 @@
 from .abstract import Drawable
-from .vector import Vector, Transformable
+from .vector import Transformable
 
 
 class Node(Drawable, Transformable):

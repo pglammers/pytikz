@@ -1,7 +1,7 @@
+from abc import ABC, abstractmethod
 import numpy as np
 from .abstract import Drawable
-from .vector import Transformable, Vector, VectorType
-from abc import ABC, abstractmethod
+from .vector import Transformable
 
 
 class Shape(ABC):
@@ -89,23 +89,13 @@ class ClosedPath(Path, ClosedShape):
         return super().__str__() + " -- cycle"
 
 
-class Rectangle(ClosedPath):
-    def __init__(self, left, right, lower, upper):
-        self._list = [
-            Vector(left, lower),
-            Vector(left, upper),
-            Vector(right, upper),
-            Vector(right, lower),
-        ]
-
-
 class Circle(ClosedShape):
     def __init__(self, center, radius):
         self.center = center
         self.radius = radius
 
     def __str__(self):
-        return f"{str(self.center)} circle ({self.radius})"
+        return f"{self.center} circle ({self.radius})"
 
     def apply(self, transformation):
         self.center = transformation(self.center)
