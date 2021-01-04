@@ -1,5 +1,5 @@
-import numpy as np
 from abc import ABC, abstractmethod
+import numpy as np
 
 
 # Implementation of Vector and of the string representation of Vector
@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 def _tikz_representation(array):
     """Alternative .__str__ method for np.ndarray."""
     if array.ndim == 1:
-        return f"({', '.join([str(c) for c in array])})"
+        return f"({', '.join(str(c) for c in array)})"
     elif array.ndim == 2:
         return " -- ".join(str(v) for v in array)
     else:
