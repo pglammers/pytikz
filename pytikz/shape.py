@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from .abstract import Drawable
+from .abstract import Drawable, AbstractList
 from .vector import Transformable
 
 
@@ -70,10 +70,7 @@ class ShapeStyle:
             return f"\\draw{options} {shape};"
 
 
-class Path(Shape, Transformable):
-    def __init__(self, data):
-        self._list = data
-
+class Path(Shape, Transformable, AbstractList):
     def __str__(self):
         return " -- ".join(str(v) for v in self._list)
 

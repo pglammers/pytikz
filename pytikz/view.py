@@ -1,11 +1,10 @@
-from .abstract import AbstractList, AbstractDrawable
+from .abstract import AbstractList
 from .shape import Shape
 
 
 class View(AbstractList):
     """Bundles a list of drawables with a common transformation."""
 
-    _type = AbstractDrawable
     clip = None
 
     def __init__(self, transformation=lambda vector: vector):
