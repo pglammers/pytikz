@@ -81,7 +81,7 @@ class Path(Shape, Transformable):
         self._list = [transformation(v) for v in self._list]
 
     def copy(self):
-        return Path(self._list)
+        return Path(self._list.copy())
 
 
 class ClosedPath(Path, ClosedShape):
