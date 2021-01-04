@@ -2,6 +2,9 @@ import numpy as np
 from abc import ABC, abstractmethod
 
 
+# Implementation of Vector and of the string representation of Vector
+
+
 def _tikz_representation(array):
     """Alternative .__str__ method for np.ndarray."""
     if array.ndim == 1:
@@ -25,6 +28,18 @@ def Vector(*args):
 
 
 VectorType = type(Vector())
+
+
+# Definition of Drawable
+
+
+class Drawable(ABC):
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
+# Implementation of transformations
 
 
 class Shiftable(ABC):
@@ -85,6 +100,9 @@ class Shift(Scaling):
         self.x = 1
         self.y = 1
         self.origin = origin
+
+
+# Definition of AnchoredObject and implementation of AnchoredVector
 
 
 class AnchoredObject(ABC):
