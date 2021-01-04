@@ -30,15 +30,6 @@ def Vector(*args):
 VectorType = type(Vector())
 
 
-# Definition of Drawable
-
-
-class Drawable(ABC):
-    @abstractmethod
-    def __str__(self):
-        pass
-
-
 # Implementation of transformations
 
 
@@ -130,8 +121,12 @@ class AnchoredVector(AnchoredObject, Transformable):
         self.anchor = anchor
         self.offset = offset
 
+    @property
+    def vector(self):
+        return self.anchor_resolve(self.offset)
+
     def __str__(self):
-        return str(self.anchor_resolve(self.offset))
+        return str(self.vector)
 
     def copy(self):
         return AnchoredVector(self.anchor, self.offset)

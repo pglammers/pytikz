@@ -1,14 +1,25 @@
 from abc import ABC, abstractmethod
 
 
+# Definition of Drawable
+
+
+class Drawable(ABC):
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
 class AbstractList(ABC):
     """Wrapped list which transforms elements through the .view method upon access."""
 
     _type = None
     _list = None
 
-    def __init__(self):
+    def __init__(self, data=[]):
         self._list = []
+        for d in data:
+            self.append(d)
 
     def append(self, item):
         if not issubclass(type(item), self._type):
