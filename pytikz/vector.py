@@ -127,9 +127,9 @@ class AnchoredObject(ABC):
 
     def anchor_resolve(self, vector):
         if self.anchor is None:
-            return vector
+            return Vector(vector)
         else:
-            return vector + self.anchor
+            return Vector(vector) + Vector(self.anchor)
 
 
 class AnchoredVector(VectorLike, AnchoredObject, Transformable):
