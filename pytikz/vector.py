@@ -87,16 +87,33 @@ class Shift(Scaling):
         self.origin = origin
 
 
-class AnchoredVector(Transformable):
+class AnchoredObject(ABC):
+    """Implements the .anchor property."""
+
+    anchor = None
+
+    def apply(self, transformation):
+        """Distributes the application of the transformation."""
+        if self.anchor is None:
+            self.apply_internally(transformation)
+        else:
+            self.anchor = transformation(self.anchor)
+        return self
+
+    def anchor_resolve(self, vector):
+        if self.anchor is None:
+            return vector
+        else:
+            return vector + self.anchor
+
+
+class AnchoredVector(AnchoredObject, Transformable):
     def __init__(self, anchor, offset):
         self.anchor = anchor
         self.offset = offset
 
     def __str__(self):
-        return str(self.anchor + self.offset)
+        return str(self.anchor_resolve(self.offset))
 
     def copy(self):
         return AnchoredVector(self.anchor, self.offset)
-
-    def apply(self, transformation):
-        self.anchor = transformation(self.anchor)
