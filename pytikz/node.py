@@ -1,5 +1,5 @@
 from .abstract import Drawable
-from .vector import VectorType, Transformable
+from .vector import Vector, Transformable
 
 
 class Node(Drawable, Transformable):
@@ -9,10 +9,7 @@ class Node(Drawable, Transformable):
 
     @property
     def position(self):
-        if isinstance(self._position, VectorType):
-            return self._position
-        else:
-            return self._position.vector
+        return Vector(self._position)
 
     def __str__(self):
         return f"\\node at {str(self.position)} {{{self.text}}};"

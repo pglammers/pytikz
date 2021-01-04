@@ -22,12 +22,25 @@ np.set_string_function(
 )  # Presents this .__str__ method to np.
 
 
+VectorType = type(np.array([]))
+
+
+class VectorLike(ABC):
+    @property
+    @abstractmethod
+    def vector(self):
+        pass
+
+
 def Vector(*args):
     """Generates a vector; used to control its generation."""
-    return np.array(list(args))
-
-
-VectorType = type(Vector())
+    args = list(args)
+    if len(args) == 1 and isinstance(args[0], VectorType):
+        return args[0]
+    elif len(args) == 1 and isinstance(args[0], VectorLike):
+        return args[0].vector
+    else:
+        return np.array(args)
 
 
 # Implementation of transformations
@@ -116,7 +129,7 @@ class AnchoredObject(ABC):
             return vector + self.anchor
 
 
-class AnchoredVector(AnchoredObject, Transformable):
+class AnchoredVector(VectorLike, AnchoredObject, Transformable):
     def __init__(self, anchor, offset):
         self.anchor = anchor
         self.offset = offset
