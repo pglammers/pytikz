@@ -85,3 +85,18 @@ class Shift(Scaling):
         self.x = 1
         self.y = 1
         self.origin = origin
+
+
+class AnchoredVector(Transformable):
+    def __init__(self, anchor, offset):
+        self.anchor = anchor
+        self.offset = offset
+
+    def __str__(self):
+        return str(self.anchor + self.offset)
+
+    def copy(self):
+        return AnchoredVector(self.anchor, self.offset)
+
+    def apply(self, transformation):
+        self.anchor = transformation(self.anchor)

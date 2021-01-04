@@ -89,3 +89,15 @@ def test_shift():
     o = N()
     with pytest.raises(ValueError):
         t(o)
+
+
+def test_anchoredvector():
+    t = pt.vector.Transformation(lambda x: x + pt.Vector(0, 1))
+    v = pt.vector.AnchoredVector(pt.Vector(0, 0), pt.Vector(1, 1))
+    a = t(v)
+    assert (v.anchor == pt.Vector(0, 0)).all()
+    assert (a.anchor == pt.Vector(0, 1)).all()
+    assert (v.offset == pt.Vector(1, 1)).all()
+    assert (a.offset == pt.Vector(1, 1)).all()
+    assert str(v) == "(1, 1)"
+    assert str(a) == "(1, 2)"
