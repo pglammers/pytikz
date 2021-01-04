@@ -66,7 +66,7 @@ class Transformation:
         else:
             if not inplace:
                 subject = subject.copy()
-            subject.apply(self._transformation)
+            subject.apply(self)
             return subject
 
 

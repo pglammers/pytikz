@@ -1,21 +1,24 @@
-from .abstract import AbstractDrawable, AbstractObject
+from .abstract import Drawable
+from .vector import VectorType, Transformable
 
 
-class Node(AbstractObject, AbstractDrawable):
-    def __init__(self, position, text, anchor=None):
+class Node(Drawable, Transformable):
+    def __init__(self, position, text):
         self._position = position
         self.text = text
-        self.anchor = anchor
 
     @property
     def position(self):
-        return self._view(self._position)
+        if isinstance(self._position, VectorType):
+            return self._position
+        else:
+            return self._position.vector
 
     def __str__(self):
         return f"\\node at {str(self.position)} {{{self.text}}};"
 
-    def apply_internally(self, transformation):
+    def apply(self, transformation):
         self._position = transformation(self._position)
 
     def copy(self):
-        return Node(self._position, self.text, self.anchor)
+        return Node(self._position, self.text)
