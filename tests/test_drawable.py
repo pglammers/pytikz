@@ -1,12 +1,12 @@
 import pytest
 
-from pytikz import Vector, Path, DrawableShape, ShapeStyle, LineWidth, LineJoin
+from pytikz import Vector, Path, ClosedPath, ShapeStyle, LineWidth, LineJoin
 
 
 def test_drawable():
     p = Path([Vector(0), Vector(1)])
     l = ShapeStyle()
-    d = DrawableShape(p, l)
+    d = l(p)
     assert str(d) == "\\draw (0) -- (1);"
 
     l.fill = True
@@ -14,7 +14,8 @@ def test_drawable():
     with pytest.raises(AssertionError):
         str(d)
 
-    p.cycle = True
+    p = ClosedPath([Vector(0), Vector(1)])
+    d = l(p)
     assert str(d) == "\\draw[fill=blue] (0) -- (1) -- cycle;"
 
     l.line = False
