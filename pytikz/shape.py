@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
 from .abstract import Drawable, AbstractList
-from .vector import Transformable
+from .vector import Vector, Transformable
 
 
 class Shape(ABC):
@@ -72,7 +72,7 @@ class ShapeStyle:
 
 class Path(Shape, Transformable, AbstractList):
     def __str__(self):
-        return " -- ".join(str(v) for v in self._list)
+        return str(np.array([Vector(v) for v in self._list]))
 
     def apply(self, transformation):
         self._list = [transformation(v) for v in self._list]
