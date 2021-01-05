@@ -17,7 +17,7 @@ class LineJoin(Enum):
     ROUND = "round"
 
 
-class AnchorPosition(Enum):
+class Orientation(Enum):
     CENTER = "center"
     NORTH = "north"
     SOUTH = "south"

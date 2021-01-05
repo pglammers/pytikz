@@ -12,12 +12,7 @@ class Shape(ABC):
 
 class ClosedShape(Shape, ABC):
     def clip(self, text):
-        return (
-            "\\begin{scope}\n"
-            f"\\clip {self};\n"
-            f"{text}\n"
-            "\\end{scope}"
-        )
+        return "\\begin{scope}\n" f"\\clip {self};\n" f"{text}\n" "\\end{scope}"
 
 
 class StyledShape(Drawable, Transformable):

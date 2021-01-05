@@ -23,7 +23,10 @@ def test_path():
     # assert str(Rectangle(0, 1, 2, 3)) == "(0, 2) -- (0, 3) -- (1, 3) -- (1, 2) -- cycle"
 
     assert str(Circle(Vector(0, 0), 1)) == "(0, 0) circle (1)"
-    assert Circle(Vector(0, 0), 1).clip("blabla") == """\\begin{scope}
+    assert (
+        Circle(Vector(0, 0), 1).clip("blabla")
+        == """\\begin{scope}
 \\clip (0, 0) circle (1);
 blabla
 \\end{scope}"""
+    )

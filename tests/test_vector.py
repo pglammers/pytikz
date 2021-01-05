@@ -68,6 +68,7 @@ def test_scaling():
     class N(pt.vector.Shiftable):
         def copy(self):
             pass
+
         def apply(self, t):
             pass
 
