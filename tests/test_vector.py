@@ -101,3 +101,16 @@ def test_anchoredvector():
     assert (a.offset == pt.Vector(1, 1)).all()
     assert str(v) == "(1, 1)"
     assert str(a) == "(1, 2)"
+
+    t = pt.vector.Transformation(lambda x: 2 * x)
+    v = pt.vector.AnchoredVector(
+        pt.vector.AnchoredVector(pt.Vector(2), pt.Vector(3)),
+        pt.vector.AnchoredVector(pt.Vector(5), pt.Vector(7)),
+    )
+    assert str(v) == "(17)"
+    assert str(t(v)) == "(19)"
+    assert str(v) == "(17)"
+    assert (t(v).anchor.anchor == pt.Vector(4)).all()
+    assert (t(v).anchor.offset == pt.Vector(3)).all()
+    assert (t(v).offset.anchor == pt.Vector(5)).all()
+    assert (t(v).offset.offset == pt.Vector(7)).all()
