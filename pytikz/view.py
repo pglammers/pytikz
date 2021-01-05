@@ -1,33 +1,17 @@
-from .abstract import AbstractList
-from .shape import Shape
+from .abstract import Drawable, AbstractList
 
 
-class View(AbstractList):
+class View(Drawable, AbstractList):
     """Bundles a list of drawables with a common transformation."""
 
-    clip = None
-
-    def __init__(self, transformation=lambda vector: vector):
+    def __init__(self, transformation=lambda v: v, clip=None):
         self._list = []
         self.transformation = transformation
+        self.clip = clip
 
     def _view(self, item):
-        return item.copy().apply(self.transformation)
-
-    def wrap_clip(self, text):
-        if self.clip is None:
-            return text
-        else:
-            if not issubclass(type(self.clip), Shape):
-                raise TypeError
-            if not self.clip.cycle:
-                raise ValueError
-            return (
-                "\\begin{scope}\n"
-                f"\\clip {str(self.clip)};\n"
-                f"{text}\n"
-                "\\end{scope}"
-            )
+        return self.transformation(item)
 
     def __str__(self):
-        return self.wrap_clip("\n".join([str(o) for o in self]))
+        data = "\n".join(str(d) for d in self)
+        return data if self.clip is None else self.clip.clip(data)

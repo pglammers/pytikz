@@ -8,7 +8,7 @@ class Node(Drawable, Transformable):
         self.text = text
 
     def __str__(self):
-        return f"\\node at {str(self.position)} {{{self.text}}};"
+        return f"\\node at {self.position} {{{self.text}}};"
 
     def apply(self, transformation):
         self.position = transformation(self.position)
