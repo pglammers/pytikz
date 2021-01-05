@@ -85,6 +85,9 @@ class ClosedPath(Path, ClosedShape):
     def __str__(self):
         return super().__str__() + " -- cycle"
 
+    def copy(self):
+        return ClosedPath(self._list.copy())
+
 
 class Circle(ClosedShape):
     def __init__(self, center, radius):
