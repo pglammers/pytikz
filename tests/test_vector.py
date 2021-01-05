@@ -65,8 +65,11 @@ def test_scaling():
     t(O(pt.Vector(0, 0)))
 
     # Test if non-scalable objects are rejected
-    class N:
-        pass
+    class N(pt.vector.Shiftable):
+        def copy(self):
+            pass
+        def apply(self, t):
+            pass
 
     o = N()
     with pytest.raises(ValueError):
