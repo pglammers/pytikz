@@ -62,9 +62,7 @@ class LatexFigure:
     def update(self, cleanup=True):
         self.write_data()
         os.system(
-            "pdflatex -output-directory={dir} {tex_file}".format(
-                tex_file=self.paths["standalone"], dir=self.paths["dir"]
-            )
+            f"pdflatex -output-directory={self.paths['dir']} {self.paths['standalone']}"
         )
         if cleanup:
             self.cleanup()
