@@ -109,6 +109,10 @@ class Shift(Scaling):
         self.origin = origin
 
 
+def compose(a, b):
+    return lambda v: a(b(v))
+
+
 # Definition of AnchoredObject and implementation of AnchoredVector
 
 
