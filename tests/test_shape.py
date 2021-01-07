@@ -1,6 +1,7 @@
 import pytest
 
-from pytikz import Vector, Path, ClosedPath, Circle
+from pytikz import Vector, Path, ClosedPath
+from pytikz.shape import Circle
 import numpy as np
 
 
