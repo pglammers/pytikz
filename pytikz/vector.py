@@ -96,7 +96,9 @@ class Scaling(Transformation):
         self.origin = origin
 
     def _transformation(self, vector):
-        return Vector(self.x * vector[0], self.y * vector[1]) + self.origin
+        return Vector(
+            self.x * (vector[0] - self.origin[0]), self.y * (vector[1] - self.origin[1])
+        )
 
 
 class Shift(Scaling):

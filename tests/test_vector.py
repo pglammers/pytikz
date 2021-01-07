@@ -59,7 +59,7 @@ def test_scaling():
 
     # Test if the transformation is correct
     t = pt.vector.Scaling(3, 5, pt.Vector(1, 1))
-    assert (t(pt.Vector(1, 2)) == pt.Vector(4, 11)).all()
+    assert (t(pt.Vector(1, 2)) == pt.Vector(0, 5)).all()
 
     # Test if transformations are not rejected
     t(O(pt.Vector(0, 0)))
@@ -80,7 +80,7 @@ def test_scaling():
 def test_shift():
 
     # Test if the transformation is correct
-    t = pt.vector.Shift(pt.Vector(1, 100))
+    t = pt.vector.Shift(-pt.Vector(1, 100))
     assert (t(pt.Vector(1, 2)) == pt.Vector(2, 102)).all()
 
     # Test if transformations are not rejected
