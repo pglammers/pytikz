@@ -16,4 +16,4 @@ class Node(Drawable, Transformable):
         self.position = transformation(self.position)
 
     def copy(self):
-        return Node(self.position, self.text)
+        return Node(self.position, self.text, self.orientation)
