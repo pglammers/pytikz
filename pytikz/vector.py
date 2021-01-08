@@ -78,7 +78,7 @@ class Transformation:
         if isinstance(subject, VectorType):
             return self._transformation(subject)
         elif not isinstance(subject, self._subject_type):
-            raise ValueError
+            raise ValueError(subject, self._subject_type)
         else:
             if not inplace:
                 subject = subject.copy()

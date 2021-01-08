@@ -90,7 +90,7 @@ class ClosedPath(Path, ClosedShape):
         return ClosedPath(self._list.copy())
 
 
-class Circle(ClosedShape):
+class Circle(ClosedShape, Transformable):
     def __init__(self, center, radius):
         self.center = center
         self.radius = radius
