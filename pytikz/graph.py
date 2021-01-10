@@ -14,3 +14,4 @@ def _log_round(value, up=False):
         for v in potential_values:
             if v <= value:
                 return v
+    raise NotImplementedError(value)
