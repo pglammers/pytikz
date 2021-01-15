@@ -80,6 +80,17 @@ class StyledShape(Drawable, Transformable):
 
 
 class ShapeStyle:
+    """Fundamental ShapeStyle class which features the draw method for drawing a Shape.
+
+    Attributes:
+        line (bool): If the Shape should be drawn as a line.
+        line_width (None or LineWidth): The width of the previous line.
+        line_join (None or LineJoin): The way the corners of the previous line should be styled.
+        fill (bool): If the Shape should be filled with a color.
+        fill_color (None or str): The string representation of the fill color.
+
+    """
+
     line = True
     line_color = None
     line_width = None
@@ -89,9 +100,30 @@ class ShapeStyle:
     fill_color = None
 
     def __call__(self, shape):
+        """Combines self with the provided shape into a Drawable StyledShape instance.
+
+        Args:
+            shape (Shape): The Shape to be styled.
+
+        Returns:
+            StyledShape: The resulting StyledShape.
+
+        """
         return StyledShape(shape, self)
 
     def draw(self, shape):
+        """Turns the provided shape into a pgf/tikz string given the configuration in self.
+
+        Args:
+            shape (Shape): The Shape to be processed.
+
+        Returns:
+            str: The pgf/tikz representation of the styled shape.
+
+        Raises:
+            AssertionError: Whenever the fill attribute is true, but the Shape not a ClosedShape.
+
+        """
         if self.fill:
             assert isinstance(shape, ClosedShape)
 
@@ -118,34 +150,58 @@ class ShapeStyle:
 
 
 class Path(Shape, Transformable, AbstractList):
+    """A Path is an AbstractList of Vectors that evaluate into a path."""
+
     def __str__(self):
+        """Implements the __str__ method from Shape."""
         return " -- ".join(str(v) for v in self)
 
     def apply(self, transformation):
+        """Implements the apply method from Transformable."""
         self._list = [transformation(v) for v in self._list]
 
     def copy(self):
+        """Implements the copy method from Transformable."""
         return Path(self._list.copy())
 
 
 class ClosedPath(Path, ClosedShape):
+    """Identical to a Path, except that the last vector is linked to the first vector in the AbstractList."""
+
     def __str__(self):
+        """Implements the __str__ method from Shape."""
         return super().__str__() + " -- cycle"
 
     def copy(self):
+        """Implements the copy method from Transformable."""
         return ClosedPath(self._list.copy())
 
 
 class Circle(ClosedShape, Transformable):
+    """A Circle is a ClosedShape that consists of a Transformable center and a nontransformable radius.
+
+    Args:
+        center (VectorType or VectorLike): The center of the circle.
+        radius (int or float): The radius of the circle.
+
+    Attributes:
+        center (VectorType or VectorLike): The center of the circle.
+        radius (int or float): The radius of the circle.
+
+    """
+
     def __init__(self, center, radius):
         self.center = center
         self.radius = radius
 
     def __str__(self):
+        """Implements the __str__ method from Shape."""
         return f"{self.center} circle ({self.radius})"
 
     def apply(self, transformation):
+        """Implements the apply method from Transformable."""
         self.center = transformation(self.center)
 
     def copy(self):
+        """Implements the copy method from Transformable."""
         return Circle(self.center, self.radius)
