@@ -1,4 +1,4 @@
-from .latex_figure import LatexFigure
+from .figure import Figure
 from .constants import *
 from .vector import Vector, AnchoredVector, Transformation, Scaling, Shift
 from .view import View
