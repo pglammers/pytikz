@@ -1,20 +1,24 @@
 import os
 import numpy as np
 
-from pytikz import LatexFigure, Vector, Path, Drawer, Drawable, LineJoin
+from pytikz import *
 
 
 if __name__ == "__main__":
-    fig = LatexFigure("figure", os.path.dirname(__file__))
+
+    np.random.seed(1)
+
+    fig = Figure("figure", os.path.dirname(__file__))
 
     data = 5 * np.random.rand(20, 2)
     vectors = [Vector(*a) for a in data]
     path = Path(vectors)
 
-    line = Drawer()
+    line = ShapeStyle()
     line.line_join = LineJoin.ROUND
 
-    d = Drawable(line, path)
+    d = line(path)
 
     fig.draw(d)
-    fig.build()
+    fig.write_all(True)
+    fig.process()

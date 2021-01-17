@@ -1,14 +1,14 @@
 import setuptools
 
+requirements = ["numpy>=1.16"]
+
 with open("README.md", "r") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="pytikz-pglammers",  # Replace with your own username
+    name="pytikz",
     version="0.0.1",
-    author="Piet Lammers",
-    author_email="email@pietlammers.com",
-    description="pytikz: generate TikZ with python",
+    description="pytikz: generate pgf/tikz files with python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pglammers/pytikz",
@@ -19,4 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
+    install_requires=requirements,
 )
