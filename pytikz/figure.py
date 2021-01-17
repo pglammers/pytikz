@@ -23,8 +23,11 @@ class Figure:
 
     def __init__(self, name, target_directory=None):
         self.name = name
+        default_target_directory = os.getcwd() if os.getcwd() else "."
         self.path_target_directory = (
-            target_directory if target_directory is not None else os.getcwd()
+            target_directory
+            if target_directory is not None
+            else default_target_directory
         )
         self._string = ""
 
