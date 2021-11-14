@@ -103,6 +103,7 @@ class AnchoredObject(Transformable):
     def apply(self, transformation: Transformation):
         self.anchor = transformation(self.anchor)
 
+    @dispatch
     def anchor_resolve(self, vector: VectorLike) -> VectorType:
         """Returns the absolute position of a vector, given the anchor."""
         return Vector(self.anchor) + Vector(vector)
