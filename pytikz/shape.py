@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from .abstract import Drawable, AbstractList
-from .vector import Transformable
+from .vector import Transformable, coordinate_string
 
 
 class Shape(ABC):
@@ -154,7 +154,7 @@ class Path(Shape, Transformable, AbstractList):
 
     def __str__(self):
         """Implements the __str__ method from Shape."""
-        return " -- ".join(str(v) for v in self)
+        return " -- ".join(coordinate_string(v) for v in self)
 
     def apply(self, transformation):
         """Implements the apply method from Transformable."""
@@ -181,11 +181,11 @@ class Circle(ClosedShape, Transformable):
     """A Circle is a ClosedShape that consists of a Transformable center and a nontransformable radius.
 
     Args:
-        center (VectorType or VectorLike): The center of the circle.
+        center (VectorType or EnhancedVector): The center of the circle.
         radius (int or float): The radius of the circle.
 
     Attributes:
-        center (VectorType or VectorLike): The center of the circle.
+        center (VectorType or EnhancedVector): The center of the circle.
         radius (int or float): The radius of the circle.
 
     """
@@ -196,7 +196,7 @@ class Circle(ClosedShape, Transformable):
 
     def __str__(self):
         """Implements the __str__ method from Shape."""
-        return f"{self.center} circle ({self.radius})"
+        return f"{coordinate_string(self.center)} circle ({self.radius})"
 
     def apply(self, transformation):
         """Implements the apply method from Transformable."""

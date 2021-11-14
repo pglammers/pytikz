@@ -1,5 +1,5 @@
 from .abstract import Drawable, AbstractList
-from .vector import Transformable, compose
+from .vector import Transformable
 
 
 class View(Drawable, Transformable, AbstractList):
@@ -67,6 +67,6 @@ class View(Drawable, Transformable, AbstractList):
             transformation (Transformation or function): The transformation to be applied.
 
         """
-        self.transformation = compose(transformation, self.transformation)
+        self.transformation = transformation * self.transformation
         if self.clip is not None:
             self.clip = transformation(self.clip)

@@ -1,17 +1,17 @@
 from .abstract import Drawable
-from .vector import Transformable
+from .vector import Transformable, coordinate_string
 
 
 class Node(Drawable, Transformable):
     """A text node at a certain position on the canvas.
 
     Args:
-        position (VectorType or VectorLike): The position of the text node.
+        position (VectorType or EnhancedVector): The position of the text node.
         text (str): The text of the text node.
         orientation (None or Orientation): The orientation of the position relative to the text.
 
     Attributes:
-        position (VectorType or VectorLike): The position of the text node.
+        position (VectorType or EnhancedVector): The position of the text node.
         text (str): The text of the text node.
         orientation (None or Orientation): The orientation of the position relative to the text.
 
@@ -30,7 +30,7 @@ class Node(Drawable, Transformable):
 
         """
         options = f"[anchor={self.orientation.value}]" if self.orientation else ""
-        return f"\\node{options} at {self.position} {{{self.text}}};"
+        return f"\\node{options} at {coordinate_string(self.position)} {{{self.text}}};"
 
     def copy(self):
         """Implements the copy method from Shiftable.

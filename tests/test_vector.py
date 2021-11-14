@@ -1,120 +1,130 @@
 import pytest
 import pytikz as pt
 import numpy as np
+from plum import dispatch
 
 
-def test_vector():
+class V(pt.vector.EnhancedVector):
+    def vector(self):
+        return pt.Vector(1, 2)
 
+
+def test_Vector():
     # Test if Vectors are cast to the correct shape under all circumstances
     assert pt.Vector().shape == (0,)
     assert pt.Vector(0).shape == (1,)
     assert pt.Vector(0, 0).shape == (2,)
 
-    # Test the string representation of a vector
-    assert str(pt.Vector(1, 2, 3)) == "(1, 2, 3)"
+    # Test casting with Vector
+    v = pt.Vector(1, 2, 3)
+    assert pt.Vector(v) is v
+
+    # Test casting with EnhancedVector
+    assert np.all(pt.Vector(V()) == pt.Vector(1, 2))
 
     # Test the behaviour of Vectors under linear transformations
     transformation = np.array([[1, 0], [3, 1], [4, 0]])
     assert np.all(pt.Vector(1, 2, 3) @ transformation == pt.Vector(19, 2))
 
-    # Test the string representation of a matrix
-    assert str(np.ones((2, 2), dtype=np.int8)) == "(1, 1) -- (1, 1)"
+
+def test_coordinate_string():
+    # Test the string representation of a Vector
+    assert pt.vector.coordinate_string(pt.Vector(1, 3)) == "(1, 3)"
+
+    # Test the string representation of an EnhancedVector
+    assert pt.vector.coordinate_string(V()) == "(1, 2)"
+
+    # Restrict representation to 2D vectors
+    with pytest.raises(Exception):
+        pt.vector.coordinate_string(pt.Vector(1, 3, 1))
 
 
-class O(pt.vector.Transformable):
+class GenericTransformable(pt.vector.Transformable):
     def __init__(self, v):
         self.v = v
 
-    def copy(self):
-        return O(self.v)
+    @dispatch
+    def copy(self) -> "GenericTransformable":
+        return GenericTransformable(self.v)
 
-    def apply(self, transformation):
+    def apply(self, transformation: pt.vector.Transformation):
         self.v = transformation(self.v)
 
 
-def test_transformation():
-
-    # Test if Vectors are passed directly to the transformation
-    t = pt.vector.Transformation(lambda x: x + pt.Vector(0, 1))
-    assert (t(pt.Vector(0, 0)) == pt.Vector(0, 1)).all()
-
-    # Test how transformable objects are passed to the transformation
-
-    o = O(pt.Vector(0, 0))
-    assert (t(o).v == pt.Vector(0, 1)).all()
-    assert (o.v == pt.Vector(0, 0)).all()
-    assert (t(o, True).v == pt.Vector(0, 1)).all()
-    assert (o.v == pt.Vector(0, 1)).all()
-
-    # Test if non-transformable objects are rejected
-    class N:
-        pass
-
-    o = N()
-    with pytest.raises(ValueError):
-        t(o)
-
-
-def test_scaling():
-
-    # Test if the transformation is correct
-    t = pt.vector.Scaling(3, 5, pt.Vector(1, 1))
-    assert (t(pt.Vector(1, 2)) == pt.Vector(0, 5)).all()
-
-    # Test if transformations are not rejected
-    t(O(pt.Vector(0, 0)))
-
-    # Test if non-scalable objects are rejected
-    class N(pt.vector.Shiftable):
-        def copy(self):
-            pass
-
-        def apply(self, t):
-            pass
-
-    o = N()
-    with pytest.raises(ValueError):
-        t(o)
-
-
-def test_shift():
-
-    # Test if the transformation is correct
-    t = pt.vector.Shift(-pt.Vector(1, 100))
-    assert (t(pt.Vector(1, 2)) == pt.Vector(2, 102)).all()
-
-    # Test if transformations are not rejected
-    t(O(pt.Vector(0, 0)))
-
-    # Test if non-scalable objects are rejected
-    class N:
-        pass
-
-    o = N()
-    with pytest.raises(ValueError):
-        t(o)
-
-
-def test_anchoredvector():
-    t = pt.vector.Transformation(lambda x: x + pt.Vector(0, 1))
-    v = pt.vector.AnchoredVector(pt.Vector(0, 0), pt.Vector(1, 1))
-    a = t(v)
-    assert (v.anchor == pt.Vector(0, 0)).all()
-    assert (a.anchor == pt.Vector(0, 1)).all()
-    assert (v.offset == pt.Vector(1, 1)).all()
-    assert (a.offset == pt.Vector(1, 1)).all()
-    assert str(v) == "(1, 1)"
-    assert str(a) == "(1, 2)"
-
+def test_Transformation():
+    # Create a generic transformation
     t = pt.vector.Transformation(lambda x: 2 * x)
-    v = pt.vector.AnchoredVector(
-        pt.vector.AnchoredVector(pt.Vector(2), pt.Vector(3)),
-        pt.vector.AnchoredVector(pt.Vector(5), pt.Vector(7)),
-    )
-    assert str(v) == "(17)"
-    assert str(t(v)) == "(19)"
-    assert str(v) == "(17)"
-    assert (t(v).anchor.anchor == pt.Vector(4)).all()
-    assert (t(v).anchor.offset == pt.Vector(3)).all()
-    assert (t(v).offset.anchor == pt.Vector(5)).all()
-    assert (t(v).offset.offset == pt.Vector(7)).all()
+
+    # Apply the transformation directly to a Vector
+    assert pt.vector.coordinate_string(t(pt.Vector(1, 2))) == "(2, 4)"
+
+    # Create a Transformable and apply the Transformation internally
+    g = GenericTransformable(pt.Vector(3, 3))
+    assert t(g, inplace=True) is None
+    assert pt.vector.coordinate_string(g.v) == "(6, 6)"
+
+    # Create a Transformable and apply the Transformation
+    g = GenericTransformable(pt.Vector(3, 3))
+    h = t(g)
+    assert pt.vector.coordinate_string(g.v) == "(3, 3)"
+    assert pt.vector.coordinate_string(h.v) == "(6, 6)"
+
+    # Create a new tranformation and a new dummy vector
+    t2 = pt.vector.Transformation(lambda x: x + pt.Vector(1, 3))
+    v = pt.Vector(10, 10)
+
+    # Apply the composed transformation to the dummy vector
+    v_transformed = (t2 * t)(v)
+
+    # Check that the output is correct
+    assert pt.vector.coordinate_string(v_transformed) == "(21, 23)"
+
+
+class A(pt.vector.AnchoredObject):
+    def copy(self):
+        pass
+
+
+def test_AnchoredObject():
+    # Test that an AnchoredObject cannot be instantiated
+    with pytest.raises(TypeError):
+        pt.vector.AnchoredObject()
+
+    # Create a generic transformation
+    t = pt.vector.Transformation(lambda x: 2 * x)
+
+    # Create an arbitrary anchored object with anchor set to None
+    a = A()
+
+    # Test that it cannot be transformed
+    with pytest.raises(AttributeError):
+        t(a)
+
+    # Set the anchor to something sensible
+    a.anchor = pt.Vector(1, 3)
+
+    # Check that the transformation is applied appropriately
+    t(a, inplace=True)
+    assert pt.vector.coordinate_string(a.anchor) == "(2, 6)"
+
+    # Check that vectors are resolved correctly
+    assert pt.vector.coordinate_string(a.anchor_resolve(pt.Vector(1, 1))) == "(3, 7)"
+
+
+def test_AnchoredVector():
+    # Create some dummies
+    a = pt.Vector(1, 3)
+    b = pt.Vector(4, 2)
+    t = pt.vector.Transformation(lambda x: 2 * x)
+
+    # Create an AnchoredVector and its transformation
+    v = pt.vector.AnchoredVector(a, b)
+    v2 = t(v)
+
+    # Verify that they represent the correct vectors
+    assert pt.vector.coordinate_string(v) == "(5, 5)"
+    assert pt.vector.coordinate_string(v2) == "(6, 8)"
+
+    # Apply the transformation in place and verify that the result is correct
+    t(v, inplace=True)
+    assert pt.vector.coordinate_string(v) == "(6, 8)"
