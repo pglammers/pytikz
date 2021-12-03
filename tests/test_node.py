@@ -24,4 +24,4 @@ def test_node():
     assert str(m) == "\\node at (11, 11) {test};"
 
     n = pt.Node(pt.Vector(1, 1), "test", pt.Orientation.SOUTH_EAST)
-    assert str(n) == "\\node[anchor=south east] at (1, 1) {test};"
+    assert pt.object_string(n) == "\\node[anchor=south east] at (1, 1) {test};"
