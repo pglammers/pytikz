@@ -1,5 +1,8 @@
+from pytikz.shape import ClosedPath
 from .abstract import Drawable, AbstractList
-from .vector import Transformable
+from .vector import Transformable, Transformation
+from plum import dispatch
+from typing import Union
 
 
 class View(Drawable, Transformable, AbstractList):
@@ -7,32 +10,19 @@ class View(Drawable, Transformable, AbstractList):
 
     Drawables are transformed through this transformation upon access.
 
-    Args:
-        transformation (function): The transformation applied when viewing each Drawable.
-        clip (None or ClosedShape): The region to clip when producing a pgf/tikz string of the entire View.
-
-    Attributes:
-        _list (list): The wrapped list of Drawables.
-        transformation (function): The transformation applied when viewing each Drawable.
-        clip (None or ClosedShape): The region to clip when producing a pgf/tikz string of the entire View.
-
     """
 
-    def __init__(self, transformation=lambda v: v, clip=None):
+    @dispatch
+    def __init__(
+        self,
+        transformation: Transformation = Transformation(lambda x: x),
+        clip: Union[ClosedPath, None] = None,
+    ):
         self._list = []
         self.transformation = transformation
         self.clip = clip
 
     def _view(self, item):
-        """Implements the _view method from AbstractList.
-
-        Args:
-            item (Drawable): The item to be viewed.
-
-        Returns:
-            Drawable: The transformed item.
-
-        """
         return self.transformation(item)
 
     def __str__(self):
@@ -47,26 +37,14 @@ class View(Drawable, Transformable, AbstractList):
         data = "\n".join(str(d) for d in self)
         return data if self.clip is None else self.clip.clip(data)
 
-    def copy(self):
-        """Implements the copy method from Shiftable.
-
-        Returns:
-            View: A copy of the View, where the list is passed as a reference.
-
-        """
+    @dispatch
+    def copy(self) -> "View":
         view = View(self.transformation, self.clip)
-        view._list = self._list
+        view._list = self._list.copy()
         return view
 
-    def apply(self, transformation):
-        """Implements the apply method from Shiftable.
-
-        Applies the transformation to the View, by composing it with the internal transformation, and applying it to the ClosedShape.
-
-        Args:
-            transformation (Transformation or function): The transformation to be applied.
-
-        """
+    @dispatch
+    def apply(self, transformation: Transformation) -> None:
         self.transformation = transformation * self.transformation
         if self.clip is not None:
             self.clip = transformation(self.clip)
