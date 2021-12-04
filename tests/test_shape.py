@@ -1,35 +1,42 @@
 import pytest
-from pytikz.vector import Transformation
+from pytikz.vector import AnchoredVector, Transformation
 from pytikz import Vector, Path, ClosedPath
 from pytikz.shape import Circle, path_string
-import numpy as np
+
+
+a = Vector(1, 2)
+b = Vector(3, 5)
+c = AnchoredVector(Vector(1, 1), Vector(2, 3))
+
+
+vector_list = [a, b, c]
 
 
 def test_path():
-    a = Vector(1, 2)
-    b = Vector(3, 5)
-    c = Vector(9, 4)
+    p = Path(vector_list)
 
-    # Verify direct string representations
-    assert path_string(Path([a, b, c])) == "(1, 2) -- (3, 5) -- (9, 4)"
+    assert path_string(Path([a, b, c])) == "(1, 2) -- (3, 5) -- (3, 4)"
 
-    # Verify copying and transformation
-    p1 = Path([a, b, c])
-    p2 = p1.copy()
-    p2.apply(Transformation(lambda v: v + a))
-    assert path_string(p1) == "(1, 2) -- (3, 5) -- (9, 4)"
-    assert path_string(p2) == "(2, 4) -- (4, 7) -- (10, 6)"
+    p2 = p.copy()
+    p2.apply(Transformation(lambda v: 2 * v))
 
-    # Verify ClosedPath
-    p3 = ClosedPath([a, b, c])
-    assert path_string(p3) == "(1, 2) -- (3, 5) -- (9, 4) -- cycle"
+    assert path_string(p) == "(1, 2) -- (3, 5) -- (3, 4)"
+    assert path_string(p2) == "(2, 4) -- (6, 10) -- (4, 5)"
 
-    # Verify Circle
-    assert path_string(Circle(Vector(0, 0), 1)) == "(0, 0) circle (1)"
+
+def test_closed_path():
+    p = ClosedPath(vector_list)
+    assert path_string(p) == "(1, 2) -- (3, 5) -- (3, 4) -- cycle"
     assert (
-        Circle(Vector(0, 0), 1).clip("blabla")
+        p.clip("blablabla")
         == """\\begin{scope}
-\\clip (0, 0) circle (1);
-blabla
+\\clip (1, 2) -- (3, 5) -- (3, 4) -- cycle;
+blablabla
 \\end{scope}"""
     )
+
+
+def test_circle():
+    c = Circle(Vector(2, 0), 1)
+    c.apply(Transformation(lambda v: 2 * v))
+    assert path_string(c) == "(4, 0) circle (1)"
