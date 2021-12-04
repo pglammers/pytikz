@@ -1,3 +1,6 @@
+from .node import object_string
+from .shape_style import object_string
+from .view import object_string
 import os
 
 
@@ -47,7 +50,7 @@ class Figure:
             drawable (Drawable): The drawable to be drawn.
 
         """
-        self.append_string(f"{drawable}\n")
+        self.append_string(f"{object_string(drawable)}\n")
 
     def path_target_file(self, suffix):
         """Returns the filename of the file described by the suffix.

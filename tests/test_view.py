@@ -41,16 +41,19 @@ def test_view():
     )
 
     s = ShapeStyle()
-    s.line=False
-    s.fill=True
-    s.fill_color="blue"
+    s.line = False
+    s.fill = True
+    s.fill_color = "blue"
 
     v.background = s
 
-    assert pt.object_string(v) =="""\\fill[blue] (1, 1) -- (2, 2) -- cycle;
+    assert (
+        pt.object_string(v)
+        == """\\fill[blue] (1, 1) -- (2, 2) -- cycle;
 \\begin{scope}
 \\clip (1, 1) -- (2, 2) -- cycle;
 \\draw (4, 4) -- (6, 6);
 \\draw (4, 4) -- (6, 6);
 \\end{scope}
 \\draw (1, 1) -- (2, 2) -- cycle;"""
+    )

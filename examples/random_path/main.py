@@ -2,6 +2,7 @@ import os
 import numpy as np
 
 from pytikz import *
+from pytikz.shape import Shape
 
 
 if __name__ == "__main__":
@@ -19,6 +20,20 @@ if __name__ == "__main__":
 
     d = line(path)
 
-    fig.draw(d)
+    blue = ShapeStyle()
+    blue.line = False
+    blue.fill = True
+    blue.fill_color = "blue!50"
+
+    boundary = ShapeStyle()
+
+    v = View(
+        clip=Circle(Vector(5 / 2, 5 / 2), 5 / 2),
+        background=blue,
+        boundary=boundary,
+    )
+    v.append(d)
+
+    fig.draw(v)
     fig.write_all(True)
     fig.process()
