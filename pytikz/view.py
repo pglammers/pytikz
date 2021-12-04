@@ -50,6 +50,7 @@ class View(Drawable, Transformable, AbstractList):
             self.clip = transformation(self.clip)
 
 
+@dispatch
 def object_string(object: View):
     data = "\n".join(str(d) for d in object)
     return data if object.clip is None else object.clip.clip(data)
