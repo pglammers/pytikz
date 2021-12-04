@@ -1,6 +1,6 @@
 from pytikz.shape import ClosedPath
 from .abstract import Drawable, AbstractList
-from .vector import Transformable, Transformation
+from .vector import Transformable, Transformation, VectorType
 from plum import dispatch
 from typing import Union
 
@@ -22,10 +22,14 @@ class View(Drawable, Transformable, AbstractList):
         self.transformation = transformation
         self.clip = clip
 
-    def _view(self, item):
+    @dispatch
+    def _view(
+        self, item: Union[Transformable, VectorType]
+    ) -> Union[Transformable, VectorType]:
         return self.transformation(item)
 
-    def __str__(self):
+    @dispatch
+    def __str__(self) -> str:
         """Implements the __str__ method from Drawable.
 
         Returns a string with the transformed Drawables concatenated, and clipped whenever a ClosedShape is provided.
