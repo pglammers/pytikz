@@ -18,22 +18,17 @@ class StyledShape(Drawable, Transformable):
         self.shape_style = shape_style
 
     @dispatch
-    def __str__(self) -> str:
-        """Implements the __str__ method from Drawable.
-
-        Returns:
-            str: The shape_style pgf/tikz string representation of the shape.
-
-        """
-        return self.shape_style.draw(self.shape)
-
-    @dispatch
     def copy(self) -> "StyledShape":
         return StyledShape(self.shape.copy(), self.shape_style)
 
     @dispatch
     def apply(self, transformation: Transformation) -> None:
         self.shape.apply(transformation)
+
+
+@dispatch
+def object_string(object: StyledShape):
+    return object.shape_style.draw(object.shape)
 
 
 class ShapeStyle(ShapeStyleFuture):
@@ -58,33 +53,18 @@ class ShapeStyle(ShapeStyleFuture):
 
     @dispatch
     def __call__(self, shape: Shape) -> StyledShape:
-        """Combines self with the provided shape into a Drawable StyledShape instance.
-
-        Args:
-            shape (Shape): The Shape to be styled.
-
-        Returns:
-            StyledShape: The resulting StyledShape.
-
-        """
         return StyledShape(shape, self)
 
     @dispatch
     def draw(self, shape: Shape) -> str:
         """Turns the provided shape into a pgf/tikz string given the configuration in self.
 
-        Args:
-            shape (Shape): The Shape to be processed.
-
-        Returns:
-            str: The pgf/tikz representation of the styled shape.
-
         Raises:
             AssertionError: Whenever the fill attribute is true, but the Shape not a ClosedShape.
 
         """
         if self.fill:
-            assert isinstance(shape, ClosedShape)
+            assert isinstance(shape, ClosedShape), f"Shape {shape} is not a ClosedShape"
 
         if not self.line:
             if self.fill:

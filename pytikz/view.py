@@ -29,19 +29,6 @@ class View(Drawable, Transformable, AbstractList):
         return self.transformation(item)
 
     @dispatch
-    def __str__(self) -> str:
-        """Implements the __str__ method from Drawable.
-
-        Returns a string with the transformed Drawables concatenated, and clipped whenever a ClosedShape is provided.
-
-        Returns:
-            str: The string pgf/tikz string representation of the view.
-
-        """
-        data = "\n".join(str(d) for d in self)
-        return data if self.clip is None else self.clip.clip(data)
-
-    @dispatch
     def copy(self) -> "View":
         view = View(self.transformation, self.clip)
         view._list = self._list.copy()
@@ -56,5 +43,5 @@ class View(Drawable, Transformable, AbstractList):
 
 @dispatch
 def object_string(object: View):
-    data = "\n".join(str(d) for d in object)
+    data = "\n".join(object_string(d) for d in object)
     return data if object.clip is None else object.clip.clip(data)

@@ -12,6 +12,6 @@ def test_view():
     v = pt.View(pt.vector.Transformation(lambda x: x + a))
     v.append(o1)
     v.append(o2)
-    assert str(v[0]) == "\\draw (2, 2) -- (3, 3);"
+    assert pt.object_string(v[0]) == "\\draw (2, 2) -- (3, 3);"
     v.apply(pt.vector.Transformation(lambda x: 2 * x))
-    assert str(v[0]) == "\\draw (4, 4) -- (6, 6);"
+    assert pt.object_string(v[0]) == "\\draw (4, 4) -- (6, 6);"

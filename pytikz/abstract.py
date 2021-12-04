@@ -8,11 +8,6 @@ class Drawable(ABC):
 
     """
 
-    @abstractmethod
-    def __str__(self):
-        """Must return the representation of the Drawable as a pgf/tikz string."""
-        pass
-
 
 class AbstractList(ABC):
     """An AbstractList is a wrapped list which transforms elements through the .view method upon access.
