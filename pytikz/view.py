@@ -48,3 +48,8 @@ class View(Drawable, Transformable, AbstractList):
         self.transformation = transformation * self.transformation
         if self.clip is not None:
             self.clip = transformation(self.clip)
+
+
+def object_string(object: View):
+    data = "\n".join(str(d) for d in object)
+    return data if object.clip is None else object.clip.clip(data)
