@@ -1,4 +1,5 @@
-from pytikz.shape import ClosedPath
+from .shape import ClosedPath
+from .shape_style import ShapeStyle
 from .abstract import Drawable, AbstractList
 from .vector import Transformable, Transformation, VectorType
 from plum import dispatch
@@ -16,11 +17,16 @@ class View(Drawable, Transformable, AbstractList):
     def __init__(
         self,
         transformation: Transformation = Transformation(lambda x: x),
+        *,
         clip: Union[ClosedPath, None] = None,
+        background: Union[ShapeStyle, None] = None,
+        boundary: Union[ShapeStyle, None] = None,
     ):
         self._list = []
         self.transformation = transformation
         self.clip = clip
+        self.background = background
+        self.boundary = boundary
 
     @dispatch
     def _view(
@@ -44,4 +50,15 @@ class View(Drawable, Transformable, AbstractList):
 @dispatch
 def object_string(object: View):
     data = "\n".join(object_string(d) for d in object)
-    return data if object.clip is None else object.clip.clip(data)
+    data_clipped = data if object.clip is None else object.clip.clip(data)
+    data_clipped = (
+        data_clipped
+        if object.background is None
+        else f"{object_string(object.background(object.clip))}\n{data_clipped}"
+    )
+    data_clipped = (
+        data_clipped
+        if object.boundary is None
+        else f"{data_clipped}\n{object_string(object.boundary(object.clip))}"
+    )
+    return data_clipped

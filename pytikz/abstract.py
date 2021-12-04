@@ -2,11 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Drawable(ABC):
-    """Abstract Drawable class for instances that can be drawn onto the pgf/tikz canvas.
-
-    The string representation of the instance should be self-contained.
-
-    """
+    """Abstract Drawable class for instances that can be drawn onto the pgf/tikz canvas."""
 
 
 class AbstractList(ABC):
