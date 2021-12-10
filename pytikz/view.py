@@ -36,7 +36,12 @@ class View(Drawable, Transformable, AbstractList):
 
     @dispatch
     def copy(self) -> "View":
-        view = View(self.transformation, clip=self.clip)
+        view = View(
+            self.transformation,
+            clip=self.clip,
+            background=self.background,
+            boundary=self.boundary,
+        )
         view._list = self._list.copy()
         return view
 
