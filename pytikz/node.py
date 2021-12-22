@@ -17,10 +17,6 @@ class Node(Drawable, Transformable):
         self.text = text
         self.orientation = orientation
 
-    def __str__(self):
-        print("Depreciated behaviour!")
-        return object_string(self)
-
     @dispatch
     def copy(self) -> "Node":
         return Node(self.position, self.text, self.orientation)

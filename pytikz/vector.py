@@ -5,37 +5,50 @@ from plum import dispatch
 import numpy as np
 
 
-class Point(ABC):
-    """Abstract class for instances that represent a point in some space."""
+# Revised 2021-12-22
 
 
-class EnhancedVector(Point):
-    """Abstract class for points that can be cast directly to VectorType."""
+# Vectors are represented by `np.ndarray`.
+VectorType = np.ndarray
+
+
+class Element(ABC):
+    """Abstract class for elements of some set.
+
+    An `Element` should carry only information necessary for describing the
+    location of some vector. If an `Element` is not `VectorLike`, then it must
+    be `Transformable` into a `VectorLike`.
+
+    """
+
+
+ElementLike = Union[VectorType, Element]
+
+
+class EnhancedVector(Element):
+    """Abstract class for elements that can be cast directly to `VectorType`."""
 
     @abstractmethod
-    def vector(self) -> np.ndarray:
-        """Returns the VectorType representation of the instance."""
+    def vector(self) -> VectorType:
+        """Returns the `VectorType` representation of the instance."""
         pass
 
 
-# The following composed types are defined in increasing order of generality.
-VectorType = np.ndarray
 VectorLike = Union[VectorType, EnhancedVector]
-PointLike = Union[VectorType, Point]
 
 
 @dispatch
-def Vector(vector: np.ndarray) -> np.ndarray:
+def Vector(vector: VectorType) -> VectorType:
     return vector
 
 
 @dispatch
-def Vector(enhanced_vector: EnhancedVector) -> np.ndarray:
+def Vector(enhanced_vector: EnhancedVector) -> VectorType:
     return enhanced_vector.vector()
 
 
 @dispatch
-def Vector(*args: Number) -> np.ndarray:
+def Vector(*args: Number) -> VectorType:
     return np.array(list(args))
 
 
@@ -43,32 +56,30 @@ def Vector(*args: Number) -> np.ndarray:
 def coordinate_string(v: VectorLike) -> str:
     v = Vector(v)
     if v.shape != (2,):
-        raise Exception
+        raise TypeError(
+            f"The `VectorLike` input has shape `{v.shape}` rather than `(2,)`."
+        )
     return f"({v[0]}, {v[1]})"
-
-
-class TransformableFuture(ABC):
-    pass
 
 
 class TransformationFuture(ABC):
     pass
 
 
-class Transformable(TransformableFuture):
-    """Abstract class for instances that may be subjected to Transformables."""
+class Transformable(ABC):
+    """Abstract class for instances that may be subjected to `Transformable`."""
 
     @abstractmethod
-    def copy(self):
-        """Returns a copy of the instance."""
+    def copy(self) -> "Transformable":
+        pass
 
     @abstractmethod
     def apply(self, transformation: TransformationFuture) -> None:
-        """Applies the transformation internally to the instance."""
+        pass
 
 
 class Transformation:
-    """Wrapper class for functions that act on Transformable instances."""
+    """Wrapper class for functions that act on `Transformable` instances."""
 
     def __init__(self, transformation):
         self._transformation = transformation
@@ -95,6 +106,7 @@ class AnchoredObject(Transformable):
     """Abstract class for anchored instances.
 
     Transformations are applied to the anchor only.
+
     """
 
     anchor = None
@@ -110,7 +122,7 @@ class AnchoredObject(Transformable):
 
 
 class AnchoredVector(EnhancedVector, AnchoredObject):
-    """EnhancedVector instance which consists of an absolute and a relative vector."""
+    """For instances which consist of an absolute and a relative `Vector`."""
 
     @dispatch
     def __init__(self, anchor: VectorType, offset: VectorType):
