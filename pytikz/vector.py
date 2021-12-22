@@ -85,11 +85,13 @@ class Transformation:
         self._transformation = transformation
 
     @dispatch
-    def __call__(self, subject: VectorType):
+    def __call__(self, subject: VectorType) -> VectorType:
         return self._transformation(subject)
 
     @dispatch
-    def __call__(self, subject: Transformable, *, inplace=False):
+    def __call__(
+        self, subject: Transformable, *, inplace=False
+    ) -> Union[None, Transformable]:
         if inplace:
             subject.apply(self)
         else:
@@ -98,7 +100,7 @@ class Transformation:
             return subject
 
     @dispatch
-    def __mul__(self, other: "Transformation"):
+    def __mul__(self, other: "Transformation") -> "Transformation":
         return Transformation(lambda x: self._transformation(other._transformation(x)))
 
 
@@ -112,7 +114,7 @@ class AnchoredObject(Transformable):
     anchor = None
 
     @dispatch
-    def apply(self, transformation: Transformation):
+    def apply(self, transformation: Transformation) -> None:
         self.anchor = transformation(self.anchor)
 
     @dispatch
