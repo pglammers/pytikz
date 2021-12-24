@@ -4,8 +4,12 @@ import numpy as np
 from plum import dispatch
 
 
+# Revised 2021-12-24
+
+
 class V(pt.vector.EnhancedVector):
-    def vector(self):
+    @dispatch
+    def vector(self) -> pt.vector.VectorType:
         return pt.Vector(1, 2)
 
 
@@ -23,8 +27,8 @@ def test_Vector():
     assert np.all(pt.Vector(V()) == pt.Vector(1, 2))
 
     # Test the behaviour of Vectors under linear transformations
-    transformation = np.array([[1, 0], [3, 1], [4, 0]])
-    assert np.all(pt.Vector(1, 2, 3) @ transformation == pt.Vector(19, 2))
+    matrix = np.array([[1, 0], [3, 1], [4, 0]])
+    assert np.all(pt.Vector(1, 2, 3) @ matrix == pt.Vector(19, 2))
 
 
 def test_coordinate_string():
@@ -35,19 +39,21 @@ def test_coordinate_string():
     assert pt.vector.coordinate_string(V()) == "(1, 2)"
 
     # Restrict representation to 2D vectors
-    with pytest.raises(Exception):
+    with pytest.raises(TypeError):
         pt.vector.coordinate_string(pt.Vector(1, 3, 1))
 
 
 class GenericTransformable(pt.vector.Transformable):
-    def __init__(self, v):
+    @dispatch
+    def __init__(self, v: pt.vector.VectorType):
         self.v = v
 
     @dispatch
     def copy(self) -> "GenericTransformable":
         return GenericTransformable(self.v)
 
-    def apply(self, transformation: pt.vector.Transformation):
+    @dispatch
+    def apply(self, transformation: pt.vector.Transformation) -> None:
         self.v = transformation(self.v)
 
 
@@ -56,18 +62,18 @@ def test_Transformation():
     t = pt.vector.Transformation(lambda x: 2 * x)
 
     # Apply the transformation directly to a Vector
-    assert pt.vector.coordinate_string(t(pt.Vector(1, 2))) == "(2, 4)"
+    assert np.all((t(pt.Vector(1, 2))) == pt.Vector(2, 4))
 
     # Create a Transformable and apply the Transformation internally
     g = GenericTransformable(pt.Vector(3, 3))
     assert t(g, inplace=True) is None
-    assert pt.vector.coordinate_string(g.v) == "(6, 6)"
+    assert np.all(g.v == pt.Vector(6, 6))
 
     # Create a Transformable and apply the Transformation
     g = GenericTransformable(pt.Vector(3, 3))
     h = t(g)
-    assert pt.vector.coordinate_string(g.v) == "(3, 3)"
-    assert pt.vector.coordinate_string(h.v) == "(6, 6)"
+    assert np.all(g.v == pt.Vector(3, 3))
+    assert np.all(h.v == pt.Vector(6, 6))
 
     # Create a new tranformation and a new dummy vector
     t2 = pt.vector.Transformation(lambda x: x + pt.Vector(1, 3))
@@ -77,7 +83,7 @@ def test_Transformation():
     v_transformed = (t2 * t)(v)
 
     # Check that the output is correct
-    assert pt.vector.coordinate_string(v_transformed) == "(21, 23)"
+    assert np.all((v_transformed) == pt.Vector(21, 23))
 
 
 class A(pt.vector.AnchoredObject):
@@ -105,10 +111,10 @@ def test_AnchoredObject():
 
     # Check that the transformation is applied appropriately
     t(a, inplace=True)
-    assert pt.vector.coordinate_string(a.anchor) == "(2, 6)"
+    assert np.all((a.anchor) == pt.Vector(2, 6))
 
     # Check that vectors are resolved correctly
-    assert pt.vector.coordinate_string(a.anchor_resolve(pt.Vector(1, 1))) == "(3, 7)"
+    assert np.all((a.anchor_resolve(pt.Vector(1, 1))) == pt.Vector(3, 7))
 
 
 def test_AnchoredVector():
@@ -122,9 +128,9 @@ def test_AnchoredVector():
     v2 = t(v)
 
     # Verify that they represent the correct vectors
-    assert pt.vector.coordinate_string(v) == "(5, 5)"
-    assert pt.vector.coordinate_string(v2) == "(6, 8)"
+    assert np.all(pt.Vector(v) == pt.Vector(5, 5))
+    assert np.all(pt.Vector(v2) == pt.Vector(6, 8))
 
     # Apply the transformation in place and verify that the result is correct
     t(v, inplace=True)
-    assert pt.vector.coordinate_string(v) == "(6, 8)"
+    assert np.all(pt.Vector(v) == pt.Vector(6, 8))

@@ -29,7 +29,7 @@ class EnhancedVector(Element):
     """Abstract class for elements that can be cast directly to `VectorType`."""
 
     @abstractmethod
-    def vector(self) -> VectorType:
+    def vector(self) -> VectorType:  # pragma: no cover
         """Returns the `VectorType` representation of the instance."""
         pass
 
@@ -70,11 +70,11 @@ class Transformable(ABC):
     """Abstract class for instances that may be subjected to `Transformable`."""
 
     @abstractmethod
-    def copy(self) -> "Transformable":
+    def copy(self) -> "Transformable":  # pragma: no cover
         pass
 
     @abstractmethod
-    def apply(self, transformation: TransformationFuture) -> None:
+    def apply(self, transformation: TransformationFuture) -> None:  # pragma: no cover
         pass
 
 
@@ -127,7 +127,7 @@ class AnchoredVector(EnhancedVector, AnchoredObject):
     """For instances which consist of an absolute and a relative `Vector`."""
 
     @dispatch
-    def __init__(self, anchor: VectorType, offset: VectorType):
+    def __init__(self, anchor: VectorLike, offset: VectorLike):
         self.anchor = anchor
         self.offset = offset
 
