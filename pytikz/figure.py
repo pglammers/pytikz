@@ -127,7 +127,7 @@ class Figure:
 
         """
         return (
-            "\\documentclass[preview,dvipsnames]{standalone}\n"
+            "\\documentclass[preview,11pt,dvipsnames]{standalone}\n"
             "\\usepackage{tikz}\n"
             "\\begin{document}\n"
             "\\begin{tikzpicture}\n"
