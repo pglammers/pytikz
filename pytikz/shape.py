@@ -81,3 +81,8 @@ class Circle(ClosedShape, Transformable):
 @dispatch
 def path_string(path: Circle) -> str:
     return f"{coordinate_string(path.center)} circle ({path.radius})"
+
+
+@dispatch
+def object_string(path: Path) -> str:
+    raise TypeError(f"Variable {path} is a Path, which is not Drawable.")

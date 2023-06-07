@@ -137,4 +137,4 @@ class AnchoredVector(EnhancedVector, AnchoredObject):
 
     @dispatch
     def copy(self) -> "AnchoredVector":
-        return AnchoredVector(self.anchor, self.offset)
+        return AnchoredVector(self.anchor.copy(), self.offset.copy())
