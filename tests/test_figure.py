@@ -17,7 +17,7 @@ def test_figure():
     assert f._string == "a"
     f.append_string("b")
     assert f._string == "ab"
-    f.draw("c")
+    f.append_string("c\n")
     assert f._string == "abc\n"
     assert f.contents_data == f._string
     assert (
@@ -28,7 +28,7 @@ def test_figure():
 """
     )
     assert f.contents_standalone == (
-        "\\documentclass[preview]{standalone}\n"
+        "\\documentclass[preview,11pt,dvipsnames]{standalone}\n"
         "\\usepackage{tikz}\n"
         "\\begin{document}\n"
         "\\begin{tikzpicture}\n"

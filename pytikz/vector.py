@@ -90,7 +90,7 @@ class Transformation:
 
     @dispatch
     def __call__(
-        self, subject: Transformable, *, inplace=False
+        self, subject: Transformable, *, inplace: bool = False
     ) -> Union[None, Transformable]:
         if inplace:
             subject.apply(self)

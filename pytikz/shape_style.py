@@ -23,7 +23,7 @@ class StyledShape(Drawable, Transformable):
 
     @dispatch
     def apply(self, transformation: Transformation) -> None:
-        self.shape.apply(transformation)
+        transformation(self.shape, inplace=True)
 
 
 @dispatch
